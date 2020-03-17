@@ -1,0 +1,64 @@
+创建一个git仓库 进入项目目录 
+右键 Git Bash Here
+git init
+git config --global user.name "小小轩"
+git config --global user.email "9673640@qq.com" --必须是邮箱格式 否则报错
+
+git add ./文件名 git add ./ 添加所有改动的文件包括新建
+
+git commit -m "简介"  如果没写-m 会进入编辑器编辑 esc  :w 保存 esc :q退出 无法退出时 esc :q!强制退出
+
+git status 查看状态 
+
+git commit --all -m "内容"   对于已被add过的可以避免再次add直接提交  没add过的是无法提交的
+
+add过的文件 commit提交 如果有更改 直接commit是提交不了的 需要再次add --all是针对于此方便简化的
+
+git log 查看日志 git log --oneline 查看简洁日志
+
+git reset --hard Head~0 回到上一次提交 1是上上次 2 3 4 以此类推
+git reset --hard 版本号 回退到指定版本  git log --oneline 开头的就是版本号
+
+回到版本号后 版本号之后提交的 git log --oneline 看不到 使用 git reflog
+
+git reflog 查看最近操作 包括被隐藏的版本号
+
+git branch 分支名 创建新分支
+
+git branch 显示所有分支
+
+git branch -d 分支名 删除分支 不能删除当前所在分支 自己不能杀自己
+
+git checkout 分支名 切换到此分支
+
+git merge 分支名 将该分支合并至主分支matser
+
+git push仓库地址 分支名 （未登录将会提示登录）上传代码
+
+git push ssh仓库地址 输入私钥（提前在giuhub仓库 setting 配置公钥上去）
+
+先初始化文件夹 git init
+再 git pull 仓库地址 分支名 拉下来代码  
+
+git clone 仓库地址 分支名 会以仓库名新建文件夹将代码下拉进去 不需要提前 git init 会覆盖之前的 一般是第一次用
+
+为了保证版本 先pull再push 以防服务器改变而本地没改变进行冲突
+
+git remote  add 变量名 变量值 在本仓库声明   可以省的每次输入网址 
+
+git remote add  MyGit 仓库地址 
+
+git push 变量名 -u 分支 以后只git push 即可推送
+
+git remote  add MyGit 仓库地址 -u master 
+
+git push
+
+git pull若也想简略 
+先remote声明 
+再-u发现不识别 
+先git pull 地址变量名 master
+再git push 地址变量名 -u master 
+然后git pull 即可
+中间遇到失败 可能是pull拉下来 没保存 应该add commit
+

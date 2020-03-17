@@ -1,0 +1,71 @@
+加锁 
+lock table 表名 read(write) , 表名2 read(write), 其他;
+解锁
+unlock tables;
+查看表加过的锁
+show open tables;
+In_user 为1 说明加了锁 0为没加锁
+
+read锁
+read锁上 A
+当前session可以查询A,但不能查询更改其他没有锁定的表，更改锁定表会出错
+
+其他session也可以查询A，也可以更改A，但是在A的read锁没释放之前 更改命令会被持续阻塞 ，导致性能下降 直到A的read锁释放 更改才会完成 对于没锁定的表 可以查询更改
+
+write锁
+write锁上 A
+当前session 可以查询，更改A 无法查询 更改其他表
+其他session不可以查询 更改A 会被阻塞 直到A解锁再执行 可以查询 更改其他没有锁的表
+
+分析表锁定
+show STATUS like 'table%';
+
+Table_ locks_ immediate: 产生表级锁定的次数，表示可以立即获取锁的查询次数，每立即获取锁值加1 ;
+Table_ locks_ _waited: 出现表级锁定争用而发生等待的次数(不能立即获取锁的次数，每等待1次锁值加1)，此值高则说明存在着较严重的表级锁争用情况;
+
+行锁-----
+关闭自动提交 开启了行锁
+set autocommit=0
+
+当一个事务操作数据但未commit时 另一个事务来操作同一行会阻塞 直到 之前的事务commit后才会执行
+如果操作的不是同一行 不会出错 并且 各自commit 都成功
+
+索引失效导致行锁变表锁
+
+但是当建立索引后 如果出现索引失效 会导致行锁变表锁 即便是不同行的操作数据 也会阻塞 
+
+例如 varchr型数据 提交的时候写成int型 虽然mysql会自动转换类型 但是因此导致索引失效 会使不同行操作也阻塞 
+
+间隙锁-----
+当我们用范围条件而不是相等条件检索数据，并请求共享或排他锁时，InnoDB会给符合条件的已有数据记录的索引项加锁;对于键值在条件范围内但并不存在的记录，叫做“间隙(GAP)" ,InnoDB也会对这个“间隙”加锁，这种锁机制就是所谓的间隙锁(Next-Key锁) 。
+
+因为Query执行过程中通过过范围查找的话，他会锁定整个范围内所有的索引键值，即使这个键值并不存在。
+间隙锁有一个比较致命的弱点，就是当锁定一个范围键值之后，即使某些不存在的键值也会被无辜的锁定，而造成在锁定的时候无法插入锁定键值范围内的任何数据。在某些场景下这可能会对性能造成很大的危害
+
+例如
+update user set money='8888' where id>1 and id<5;
+user表中没有id=2的数据 只有 3 4
+暂不commit
+此时另外的事务进行 insert into user name(id,money) value(2,'2000');
+会被阻塞 当之前的事务commit后 才会被执行插入id=2操作 而且 money=2000
+
+如何锁定一行数据？
+
+set autocommit=0
+
+select * from user where id=1 for update;   ---for update 
+
+在此事务为commit前 别的事务操作这行数据 会被阻塞直至commit
+
+
+show status like'innodb_row_lock%';
+
+Innodb_row_lock_current_waits  当前正在等待锁定的数量; 
+Innodb_row_lock_time       从系统启动到现在锁定总时间长度;**
+Innodb_row_lock_time_avg    每次等待所花平均时间;**
+Innodb_row_lock_time_max    从系统启动到现在等待最常的一次所花的时间;**
+Innodb_row_lock_waits   系统启动后到现在总共等待的次数;
+
+Innodb存储引擎由于实现了行级锁定，虽然在锁定机制的实现方面所带来的性能损耗可能比表级锁定会要更高一些，但是在整体并发处理能力方面要远远优于MyISAM的表级锁定的。当系统并发量较高的时候，Innodb的整 体性能和MyISAM相比就会有比较明显的优势了。
+
+但是，Innodb的行级锁定同样也有其脆弱的一面，当我们使用不当的时候，可能会让Innodb的整体性能表现不仅不能比MyISAM高，，甚至可能会更差。（比如索引失效导致行锁变表锁）

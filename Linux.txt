@@ -1,0 +1,92 @@
+https://cdn.jsdelivr.net/gh/WendyBoys/cos/img/QQ截图20200309105859.png
+
+https://api.ssrnode.cc/link/vvtSmywRIJWZ6oCq?sub=1
+https://jsqpro.pro xyz com
+https://taggood.xyz/
+
+9676640@qq.com XUAN.199951199951
+15290830501@163.com Xuan.199951199951
+
+TecentLinux
+XUAN.199951.xuangege.199951
+
+gta5 
+9673640@qq.com
+Xuan.199951
+
+xxx123564
+123564
+
+linux cpu%
+top -bn 1 -i -c
+
+docker exec -it tomcat bash
+docker cp demo.war tomcat:/usr/local/tomcat/webapps
+#nohup java -jar demo-0.0.1-SNAPSHOT.jar &
+
+
+nohup java -jar market.jar >logs.log &
+netstat -lnp|grep 80
+kill xxxx
+
+
+yum install lrzsz 上传下载工具
+
+sz 下载到本地 rz 上传本地文件至当前linux目录
+
+docker exec -it redis redis-cli
+
+1. docker exec -it mysql bash
+2. mysql -uroot -p
+进入到Mysql命令行后
+
+3. ALTER USER 'root'@'%' IDENTIFIED WITH mysql_native_password BY '199951';
+4. flush privileges;
+
+yum install -y yum-utils device-mapper-persistent-data lvm2
+yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+yum list docker-ce.x86_64 --showduplicates | sort -r
+yum -y install docker-ce-17.09.0.ce-1.el7.centos
+
+
+docker run -p 3306:3306 --name mysql -e MYSQL_ROOT_PASSWORD=199951 -d mysql
+
+sudo mkdir -p /etc/docker
+sudo tee /etc/docker/daemon.json <<-'EOF'
+{
+  "registry-mirrors": ["https://nbi45khi.mirror.aliyuncs.com"]
+}
+EOF
+sudo systemctl daemon-reload
+sudo systemctl restart docker
+
+
+
+rocketmq 
+目录下
+
+name server 启动  ip修改为你服务器对应公网ip
+
+nohup ./bin/mqnamesrv -n 你的公网IP:9876 &
+查看name server启动日志
+tail -f ~/logs/rocketmqlogs/namesrv.log
+
+不能写localhost
+在conf/broker.conf 中 加入brokerIP1=你的公网IP
+
+
+broker 启动
+
+
+nohup sh bin/mqbroker -n 203.195.171.218:9876 -c conf/broker.conf autoCreateTopicEnable=true &
+
+查看broker启动日志
+ tail -f ~/logs/rocketmqlogs/broker.log
+以上所有参数必须带上，不然全是坑 ,
+
+关闭name server， broker
+./bin/mqshutdown namesrv
+./bin/mqshutdown broker
+
+关闭本地iis服务 iis会占用80端口
+iisreset/stop
