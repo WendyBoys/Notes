@@ -24,7 +24,7 @@ docker exec -it tomcat bash
 docker cp demo.war tomcat:/usr/local/tomcat/webapps
 #nohup java -jar demo-0.0.1-SNAPSHOT.jar &
 
-
+ 
 nohup java -jar market.jar >logs.log &
 netstat -lnp|grep 80
 kill xxxx

@@ -12,7 +12,7 @@ INSERT INTO user(msg) VALUES(JSON_OBJECT("sex", 1, "age", 19, "tag", JSON_ARRAY(
 tag为JSON数组
 
 使用JSON_INSERT()插入新值，但不会覆盖已经存在的值
-UPDATE test_user SET info = JSON_INSERT(info, '$.sex', 1, '$.nick_name', '小花') where id=2;
+UPDATE user SET info = JSON_INSERT(info, '$.sex', 1, '$.nick_name', '小花') where id=2;
 
 使用JSON_SET()插入新值，并覆盖已经存在的值
 update user set msg= json_set(msg,"$.address","Guangzhou") where id = 2;
@@ -20,11 +20,11 @@ update user set msg= json_set(msg,"$.address","Guangzhou") where id = 2;
 当没有address属性时 会添加address属性
 
 使用JSON_REPLACE()只替换存在的值
-UPDATE test_user SET info = JSON_REPLACE(info, '$.sex', 1, '$.tag', '[1,2,3]') where id=2;
+UPDATE user SET info = JSON_REPLACE(info, '$.sex', 1, '$.tag', '[1,2,3]') where id=2;
 
 {"tel": "Guangzhou", "name": "Mike", "address": "Beijing"}
 {"sex": "男", "tel": "Guangzhou", "name": "Mike", "address": "Beijing"}
 
 
 使用JSON_REMOVE()删除JSON元素
-UPDATE test_user SET info = JSON_REMOVE(info, '$.sex', '$.tag') where id=1;
+UPDATE user SET info = JSON_REMOVE(info, '$.sex', '$.tag') where id=1;
