@@ -90,3 +90,5 @@ nohup sh bin/mqbroker -n 203.195.171.218:9876 -c conf/broker.conf autoCreateTopi
 
 关闭本地iis服务 iis会占用80端口
 iisreset/stop
+
+

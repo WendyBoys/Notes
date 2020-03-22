@@ -1,0 +1,18 @@
+nginx
+先安装依赖
+yum -y install gcc pcre-devel zlib-devel openssl openssl-devel
+tar -zxvf nginx.tar.gz
+cd /usr/local/nginx
+./configure
+make && make install
+
+/usr/local/nginx/sbin  目录下 
+./nginx 启动
+./nginx -s stop 关闭
+./nginx -s reload 重启
+
+
+nginx.conf
+
+ 在server的location下配置
+proxy_pass http://127.0.0.1:8080即可通过访问nginx主界面重定向到这里
