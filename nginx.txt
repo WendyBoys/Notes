@@ -16,3 +16,79 @@ nginx.conf
 
  在server的location下配置
 proxy_pass http://127.0.0.1:8080即可通过访问nginx主界面重定向到这里
+
+
+在注释的server下 去掉注释
+即可添加别的端口反向代理
+
+location 匹配规则
+=	精确匹配：用于标准uri前，要求请求字符串和uri严格匹配。如果匹配成功就停止匹配，立即执行该location里面的请求。
+~	正则匹配：用于正则uri前，表示uri里面包含正则，并且区分大小写。
+~*	正则匹配：用于正则uri前，表示uri里面包含正则，不区分大小写。
+^~	非正则匹配；用于标准uri前，nginx服务器匹配到前缀最多的uri后就结束，该模式匹配成功后，不会使用正则匹配。
+无	普通匹配（最长字符匹配）；与location顺序无关，是按照匹配的长短来取匹配结果。若完全匹配，就停止匹配。
+
+实例：
+location = /news/ {
+            echo "test1";
+        }
+192.168.249.132/news/
+test1
+
+location ~ \.(html) {
+    echo 'test2';
+}
+location ~ \.(htmL) {
+    echo 'test3';
+}
+192.168.249.132/index.html
+test2
+ 192.168.249.132/index.htmL
+test3
+
+location ~* \.(html){
+            echo 'test4';
+}
+ 192.168.249.132/index.htmL
+test4
+ 192.168.249.132/index.html
+test4
+
+location ^~ /index/ {
+            echo 'test5';
+}
+ 192.168.249.132/index/
+test5
+ 192.168.249.132/index/heihei
+test5
+192.168.249.132/index/asdnmkalsjd
+test5
+
+location / {
+            echo 'test6';
+}
+192.168.249.132
+test6
+
+
+负载均衡的四种方式（轮询（默认） Weight权重 ipHash fair）
+轮询：逐个代理
+Weight：按照权重比例 越大 分配的次数越多  比如权重10 是5的2倍
+ipHash：首次访问分配的 此ip持续访问都会保持这一个
+fair：按照相应时间 优先回响应时间短的
+
+在http下
+    upstream myserver（名称）{
+
+	ip_hash;	
+	server 127.0.0.1:8080 weight=5;
+	
+	server 127.0.0.1:8081 weight=10;
+
+	fair;
+	
+}
+然后在server下配置 proxy_pass http://myserver;
+
+
+
