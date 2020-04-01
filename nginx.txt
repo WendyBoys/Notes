@@ -21,6 +21,29 @@ proxy_pass http://127.0.0.1:8080即可通过访问nginx主界面重定向到这里
 在注释的server下 去掉注释
 即可添加别的端口反向代理
 
+
+nginx配置ssl
+listen     443 ssl;
+        server_name localhost;
+        ssl_certificate   /usr/local/ssl/1_wuaistudy.com_bundle.crt;
+        ssl_certificate_key  /usr/local/ssl/2_wuaistudy.com.key;
+
+
+server {
+    listen 80;
+    listen 443 ssl;
+    server_name www.old-name.com;
+    return 301 $scheme://www.new-name.com$request_uri;
+}
+1
+2
+3
+4
+5
+6
+上面代码中，listen 指令表明 server 块同时用于 HTTP 和 HTTPS 流量。server_name 指令匹配包含域名 ‘www.old-name.com’ 的请求。return 指令告诉 Nginx 停止处理请求，直接返回 301 (Moved Permanently) 代码和指定的重写过的 URL 到客户端。$scheme 是协议（HTTP 或 HTTPS），$request_uri 是包含参数的完整的 URI。
+
+
 location 匹配规则
 =	精确匹配：用于标准uri前，要求请求字符串和uri严格匹配。如果匹配成功就停止匹配，立即执行该location里面的请求。
 ~	正则匹配：用于正则uri前，表示uri里面包含正则，并且区分大小写。

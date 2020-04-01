@@ -1,0 +1,65 @@
+实现多线程的三种方式  ：
+继承Thread
+实现Runnable接口（推荐）
+实现Callable接口（有返回值）
+call为实现了Callable接口的类
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
+        Future<Boolean> submit1 = executorService.submit(new call());
+        Future<Boolean> submit2 = executorService.submit(new call());
+        Boolean aBoolean = submit1.get();获取返回值
+        executorService.shutdownNow();停止线程
+        System.out.println(aBoolean);
+
+关闭线程一般通过flag等标识关闭而非stop
+yield() 线程礼让 暂停当前执行的线程 但不是阻塞 但是cpu可能还会选择这个线程继续 所以 礼让不是100%成功
+join() 强制加队 先执行此线程 执行完毕再执行其他进程 中间其他线程阻塞
+
+线程的状态
+NEW：尚未启动的线程处于此状态。
+RUNNABLE：可运行状态
+在Java虛拟机中执行的线程处于此状态。
+BLOCKED
+被阻塞等待监视器锁定的线程处于此状态。
+WAITING
+正在等待另一个线程执行特定动作的线程处于此状态。
+TIMED WAITING
+正在等待另一个线程执行动作达到指定等待时间的线程处于此状态。
+TERMINATED
+已退出的线程处于此状态。
+
+getPriority()  setPriority(int x)  优先级1-10   优先级大的很大几率先执行 但是不一定百分百比优先级低的先执行 
+
+◆线程分为用户线程和守护线程
+◆虚拟机必须确保用户线程执行完毕
+◆虚拟机不用等待守护线程执行完毕
+◆如，后台记录操作日志，监控内存，垃圾回收等待..
+创建的线程默认都是用户线程  执行完毕才会停止
+setDaemon（true） 设置为 守护线程  
+
+synchronized锁(应该加在被改变的量上，加在方法是上默认的this)
+◆一个线程持有锁会导致其他所有需要此锁的线程挂起; 
+◆在多线程竞争下,加锁,释放锁会导致比较多的上下文切换和调度延时，引起性能问题;
+◆如果一个优先级高的线程等待一个优先级低的线程释放锁 会导致优先级倒置,引起性能问题.
+
+Lock锁
+  ReentrantLock reentrantLock=new ReentrantLock();
+   reentrantLock.lock();
+   reentrantLock.unlock();
+
+使用优先级 ReentrantLock > synchronized代码块>synchronized方法
+
+
+CopyOnWriteArrayList是线程安全的   ArrayList是线程不安全的 
+
+>产生死锁的四个必要条件:
+1. 互斥条件:一个资源每次只能被一 个进程使用。
+2.请求与保持条件: 一个进程因请求资源而阻塞时，对已获得的资源保持不放。
+3.不剥夺条件 :进程已获得的资源，在末使用完之前，不能强行剥夺。
+4. 循环等待条件:若干进程之间形成一-种头尾相接的循环等待资源关系。
+
+线程池创建
+   ExecutorService executorService = Executors.newFixedThreadPool(num);//num为线程池大小
+        Future<Boolean> submit1 = executorService.submit(new call());//参数为callable实现的线程
+        executorService.excute(new Run());//参数为runnable实现的线程
+        executorService.shutdownNow();停止线程
+  

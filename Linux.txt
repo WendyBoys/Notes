@@ -4,8 +4,17 @@ https://api.ssrnode.cc/link/vvtSmywRIJWZ6oCq?sub=1
 https://jsqpro.pro xyz com
 https://taggood.xyz/
 
+  <a href="http://beian.miit.gov.cn" style="font-size: 13px">豫ICP备19038459号</a>
+
 9676640@qq.com XUAN.199951199951
 15290830501@163.com Xuan.199951199951
+
+rm -rf 删除文件夹和里面的文件
+ps aux|grep 进程名
+
+松阿里云
+a1360873209
+XUAN.199951
 
 TecentLinux
 XUAN.199951.xuangege.199951
@@ -28,6 +37,12 @@ docker cp demo.war tomcat:/usr/local/tomcat/webapps
 nohup java -jar market.jar >logs.log &
 netstat -lnp|grep 80
 kill xxxx
+
+yum search java | grep -i --color jdk
+
+yum install -y java-1.8.0-openjdk java-1.8.0-openjdk-devel
+#或者如下命令，安装jdk1.8.0的所有文件
+yum install -y java-1.8.0-openjdk*
 
 
 yum install lrzsz 上传下载工具

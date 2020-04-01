@@ -1,3 +1,6 @@
+git 生成公钥
+ssh-keygen -t rsa -b 2048 -C “邮箱地址”
+
 创建一个git仓库 进入项目目录 
 右键 Git Bash Here
 git init
