@@ -1,0 +1,135 @@
+# 使用SpringBoot、Redis、RocketMq、Mybatis、Mysql实现模拟高并发秒杀
+
+##  最终采用压力测试工具 Jmeter进行测试，旨在为新手入门学习提供思路
+
+**秒杀逻辑：**
+
+    @ResponseBody
+         @RequestMapping("/seckill")
+          public String seckill(int userid,String goodsName)
+        {
+        RLock fairLock = redissonClient.getFairLock("anyLock");
+        try {
+            //开启分布式公平锁,根据用户访问的先后顺序秒杀
+            fairLock.lock(10, TimeUnit.SECONDS);
+            //判断订单set中是否已经有该用户id，有则秒杀已经成功，无法再次秒杀
+            if (stringRedisTemplate.opsForSet().isMember("orderset", userid+""))
+            {
+                System.out.println(userid + "  您已经秒杀成功，请勿重复秒杀");
+                return "3";
+            }
+            //获取当前库存
+            String kc = stringRedisTemplate.opsForValue().get("kc");
+            //库存key不存在，说明秒杀未开始
+            if (kc == null) {
+                System.out.println(userid + "  秒杀未开始！");
+                return "0";
+            }
+            //库存小于等于0
+            if (Integer.parseInt(kc) <= 0) {
+
+                System.out.println(userid + "  库存为0，秒杀失败");
+                return "2";
+            }
+            //当前还有库存，可以秒杀
+            if (Integer.parseInt(kc) > 0) {
+                //库存减1
+                stringRedisTemplate.opsForValue().decrement("kc", 1);
+                //向订单集合中添加
+                stringRedisTemplate.opsForSet().add("orderset", userid + "");
+                rocketMQTemplate.convertAndSend("seckill",new Order(goodsName,userid));
+
+                System.out.println("用户:"+userid + "  秒杀成功");
+                return "1";
+            }
+        }finally {
+            //解锁
+            fairLock.unlock();
+        }
+            return "2";
+    }
+
+
+
+
+
+**RocketMq消费者：**
+
+    @Component
+    @RocketMQMessageListener(topic = "seckill",consumerGroup = "springboot-mq-Consumer-1")
+     public class Consumer implements RocketMQListener<Order> {
+
+    @Autowired
+    OrderMapper orderMapper;
+    @Override
+    public void onMessage(Order order) {
+        //通知数据库创建订单
+        orderMapper.order(order);
+    }
+}
+
+
+**实体类：**
+
+    public class Order {
+    private int id;
+    private String goodsName;
+    private int userid;
+
+    public Order(String goodsName, int userid) {
+        this.goodsName = goodsName;
+        this.userid = userid;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getGoodsName() {
+        return goodsName;
+    }
+
+    public void setGoodsName(String goodsName) {
+        this.goodsName = goodsName;
+    }
+
+    public int getUserid() {
+        return userid;
+    }
+
+    public void setUserid(int userid) {
+        this.userid = userid;
+    }
+}
+
+**Mybatis：**
+
+    @Component
+    @Mapper
+    public interface OrderMapper {
+
+    @Insert("insert into orders (goodsName,userid) value(#{goodsName},#{userid})")
+     void order(Order order);
+}
+
+
+**开始测试：**
+首先在redis中放置10个库存
+![image|687x500](upload://mGpzVJf94K31tXHTymaFDMZ8D7z.png) 
+
+
+**Jmeter：1s中发送1000个秒杀请求**
+![image|690x388](upload://8xAsncsl87j7B4FTY4aB4N7kRC2.png) 
+
+**结果：**
+![image|690x215](upload://b4QUk07UB6dXq1JvkGpTJ5I4ruC.png) 
+
+![image|687x500](upload://p920axvpahzIp8nZf12qUAsyZa5.png) 
+
+![image|690x469](upload://yD8h0dCZmNqqqjTO5Cuwt8b2p0f.png) 
+
+**正好将10个库存售卖完毕，没有出现库存超卖和遗留的问题，超卖和遗留问题，根源其实是并发时库存数据被多个人同时获取导致的，我们可以使用Redisson分布式锁或者使用redis的decrement方法（具有原子性）返回值进行判断，本文采用的是Redisson分布式锁，如果对Redisson分布式锁不是很了解的同学，可以点击这里了解一下 https://github.com/redisson/redisson/wiki/8.-%E5%88%86%E5%B8%83%E5%BC%8F%E9%94%81%E5%92%8C%E5%90%8C%E6%AD%A5%E5%99%A8#81-%E5%8F%AF%E9%87%8D%E5%85%A5%E9%94%81reentrant-lock**

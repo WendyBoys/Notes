@@ -1,0 +1,36 @@
+ <dependency>
+   
+         <groupId>com.github.qcloudsms</groupId>
+     
+       <artifactId>qcloudsms</artifactId>
+     
+       <version>1.0.6</version>
+  
+  </dependency> 
+
+
+public String smss(String phone)
+    {
+        // 短信应用 SDK AppID
+        int appid =; // SDK AppID 以1400开头
+        // 短信应用 SDK AppKey
+        String appkey = "";
+        // 需要发送短信的手机号码
+        String[] phoneNumbers = {phone};
+        // 短信模板 ID，需要在短信应用中申请
+        int templateId = 535968; // NOTE: 这里的模板 ID`7839`只是示例，真实的模板 ID 需要在短信控制台中申请
+        // 签名
+        String smsSign = "吾爱学习网"; // NOTE: 签名参数使用的是`签名内容`，而不是`签名ID`。这里的签名"腾讯云"只是示例，真实的签名需要在短信控制台申请
+
+        try {
+            int vcode = (int)(Math.random() * 100000)+100000;
+            String[] params = {String.valueOf(vcode),"5"};
+            SmsSingleSender ssender = new SmsSingleSender(appid, appkey);
+            SmsSingleSenderResult result = ssender.sendWithParam("86", phoneNumbers[0],
+                    templateId, params, smsSign, "", "");
+            System.out.println(result);
+            return String.valueOf(vcode);
+        } catch (Exception e) {
+           throw new RuntimeException(e);
+        }
+    }
