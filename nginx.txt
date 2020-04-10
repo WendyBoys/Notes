@@ -11,6 +11,9 @@ make && make install
 ./nginx -s stop 关闭
 ./nginx -s reload 重启
 
+提示pid找不到时 这样启动
+/usr/local/nginx/sbin/nginx -c /usr/local/nginx/conf/nginx.conf
+
 
 nginx.conf
 
