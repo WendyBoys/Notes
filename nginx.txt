@@ -24,6 +24,14 @@ proxy_pass http://127.0.0.1:8080即可通过访问nginx主界面重定向到这里
 在注释的server下 去掉注释
 即可添加别的端口反向代理
 
+nginx打开ssl功能
+进入nginx源码包
+/usr/local/nginx/sbin/nginx -V  
+./configure --prefix=/usr/local/nginx --with-http_ssl_module
+make
+cp ./objs/nginx /usr/local/nginx/sbin/
+
+
 
 nginx配置ssl
 listen     443 ssl;
