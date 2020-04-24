@@ -1,0 +1,32 @@
+exists
+SELECT * FROM employees where not exists (select emp_no from dept_emp where dept_emp.emp_no = employees.emp_no )
+
+
+Exists的用法：
+
+exists对外表用loop逐条查询，每次查询都会查看exists的条件语句，当 exists里的条件语句能够返回记录行时(无论记录行是的多少，只要能返回)，条件就为真，返回当前loop到的这条记录;反之如果exists里的条 件语句不能返回记录行，则当前loop到的这条记录被丢弃，exists的条件就像一个bool条件，当能返回结果集则为true，不能返回结果集则为 false。
+慎用Exists( ！= )
+
+总的来说，如果外表有n条记录，那么exists查询就是将这n条记录逐条取出，然后判断n遍exists条件
+如果使用：
+
+select * from employees
+where  exists( select emp_no from dept_emp where dept_emp.emp_no != employees.emp_no)
+那么，Exists都会从外表employees里面逐条比对，如，第一条的emp_no = '10001'，那么
+Exists判断：
+
+select emp_no from dept_emp where dept_emp.emp_no !='10001'
+可想而知，一定存在不等于10001的结果集。那么上面的查询语句其实也就等效于：
+
+select * from employees
+
+
+
+case else语句
+select e.emp_no,e.first_name,e.last_name,b.btype,s.salary,
+(case b.btype
+when 1 then s.salary*0.1
+when 2 then s.salary*0.2
+else s.salary*0.3 end) as bonus
+from employees e inner join emp_bonus b on e.emp_no=b.emp_no inner join salaries s on
+s.emp_no=e.emp_no
