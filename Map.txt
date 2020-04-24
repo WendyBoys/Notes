@@ -24,6 +24,17 @@ HashMapÔÚµ×²ãÊý¾Ý½á¹¹ÉÏ²ÉÓÃÁËÊý×é£«Á´±í£«ºìºÚÊ÷£¬Í¨¹ýÉ¢ÁÐÓ³ÉäÀ´´æ´¢¼üÖµ¶ÔÊý¾ÝÒòÎ
 HashMapÔÚputµÄÊ±ºò£¬²åÈëµÄÔªËØ³¬¹ýÁËÈÝÁ¿£¨ÓÉ¸ºÔØÒò×Ó¾ö¶¨£©µÄ·¶Î§¾Í»á´¥·¢À©ÈÝ²Ù×÷£¬¾ÍÊÇrehash£¬Õâ¸ö»áÖØÐÂ½«Ô­Êý×éµÄÄÚÈÝÖØÐÂhashµ½ÐÂµÄÀ©ÈÝÊý×éÖÐ£¬ÔÚ¶àÏß³ÌµÄ»·¾³ÏÂ£¬´æÔÚÍ¬Ê±ÆäËûµÄÔªËØÒ²ÔÚ½øÐÐput²Ù×÷£¬Èç¹ûhashÖµÏàÍ¬£¬¿ÉÄÜ³öÏÖÍ¬Ê±ÔÚÍ¬Ò»Êý×éÏÂÓÃÁ´±í±íÊ¾£¬Ôì³É±Õ»·£¬µ¼ÖÂÔÚgetÊ±»á³öÏÖËÀÑ­»·£¬ËùÒÔHashMapÊÇÏß³Ì²»°²È«µÄ
 
 
+½â¾öHash³åÍ»
+ HashmapÀïÃæµÄbucket³öÏÖÁËµ¥Á´±íµÄÐÎÊ½£¬É¢ÁÐ±íÒª½â¾öµÄÒ»¸öÎÊÌâ¾ÍÊÇÉ¢ÁÐÖµµÄ³åÍ»ÎÊÌâ£¬Í¨³£ÊÇÁ½ÖÖ·½·¨£ºÁ´±í·¨ºÍ¿ª·ÅµØÖ··¨¡£Á´±í·¨¾ÍÊÇ½«ÏàÍ¬hashÖµµÄ¶ÔÏó×éÖ¯³ÉÒ»¸öÁ´±í·ÅÔÚhashÖµ¶ÔÓ¦µÄ²ÛÎ»£»¿ª·ÅµØÖ··¨ÊÇÍ¨¹ýÒ»¸öÌ½²âËã·¨£¬µ±Ä³¸ö²ÛÎ»ÒÑ¾­±»Õ¼¾ÝµÄÇé¿öÏÂ¼ÌÐø²éÕÒÏÂÒ»¸ö¿ÉÒÔÊ¹ÓÃµÄ²ÛÎ»¡£
+
+java.util.HashMap²ÉÓÃµÄÁ´±í·¨µÄ·½Ê½£¬Á´±íÊÇµ¥ÏòÁ´±í¡£
+
+ÏµÍ³×ÜÊÇ½«ÐÂÌí¼ÓµÄ Entry ¶ÔÏó·ÅÈë table Êý×éµÄ bucketIndex Ë÷Òý´¦¡ª¡ªÈç¹û bucketIndex Ë÷Òý´¦ÒÑ¾­ÓÐÁËÒ»¸ö Entry ¶ÔÏó£¬ÄÇÐÂÌí¼ÓµÄ Entry ¶ÔÏóÖ¸ÏòÔ­ÓÐµÄ Entry ¶ÔÏó£¨²úÉúÒ»¸ö Entry Á´£©£¬Èç¹û bucketIndex Ë÷Òý´¦Ã»ÓÐ Entry ¶ÔÏó£¬Ò²¾ÍÊÇÉÏÃæ³ÌÐò´úÂëµÄ e ±äÁ¿ÊÇ null£¬Ò²¾ÍÊÇÐÂ·ÅÈëµÄ Entry ¶ÔÏóÖ¸Ïò null£¬Ò²¾ÍÊÇÃ»ÓÐ²úÉú Entry Á´¡£
+
+       HashMapÀïÃæÃ»ÓÐ³öÏÖhash³åÍ»Ê±£¬Ã»ÓÐÐÎ³Éµ¥Á´±íÊ±£¬hashmap²éÕÒÔªËØºÜ¿ì,get()·½·¨ÄÜ¹»Ö±½Ó¶¨Î»µ½ÔªËØ£¬µ«ÊÇ³öÏÖµ¥Á´±íºó£¬µ¥¸öbucket Àï´æ´¢µÄ²»ÊÇÒ»¸ö Entry£¬¶øÊÇÒ»¸ö Entry Á´£¬ÏµÍ³Ö»ÄÜ±ØÐë°´Ë³Ðò±éÀúÃ¿¸ö Entry£¬Ö±µ½ÕÒµ½ÏëËÑË÷µÄ Entry ÎªÖ¹¡ª¡ªÈç¹ûÇ¡ºÃÒªËÑË÷µÄ Entry Î»ÓÚ¸Ã Entry Á´µÄ×îÄ©¶Ë£¨¸Ã Entry ÊÇ×îÔç·ÅÈë¸Ã bucket ÖÐ£©£¬ÄÇÏµÍ³±ØÐëÑ­»·µ½×îºó²ÅÄÜÕÒµ½¸ÃÔªËØ¡£
+
+       µ±´´½¨ HashMap Ê±£¬ÓÐÒ»¸öÄ¬ÈÏµÄ¸ºÔØÒò×Ó£¨load factor£©£¬ÆäÄ¬ÈÏÖµÎª 0.75£¬ÕâÊÇÊ±¼äºÍ¿Õ¼ä³É±¾ÉÏÒ»ÖÖÕÛÖÔ£ºÔö´ó¸ºÔØÒò×Ó¿ÉÒÔ¼õÉÙ Hash ±í£¨¾ÍÊÇÄÇ¸ö Entry Êý×é£©ËùÕ¼ÓÃµÄÄÚ´æ¿Õ¼ä£¬µ«»áÔö¼Ó²éÑ¯Êý¾ÝµÄÊ±¼ä¿ªÏú£¬¶ø²éÑ¯ÊÇ×îÆµ·±µÄµÄ²Ù×÷£¨HashMap µÄ get() Óë put() ·½·¨¶¼ÒªÓÃµ½²éÑ¯£©£»¼õÐ¡¸ºÔØÒò×Ó»áÌá¸ßÊý¾Ý²éÑ¯µÄÐÔÄÜ£¬µ«»áÔö¼Ó Hash ±íËùÕ¼ÓÃµÄÄÚ´æ¿Õ¼ä¡£
+
 Èç¹ûÁ½¸ö¼üµÄhashcodeÏàÍ¬£¬ÄãÈçºÎ»ñÈ¡Öµ¶ÔÏó£¿¡±µ±ÎÒÃÇµ÷ÓÃget()·½·¨£¬HashMap»áÊ¹ÓÃ¼ü¶ÔÏóµÄhashcodeÕÒµ½bucketÎ»ÖÃ£¬HashMapÔÚÁ´±íÖÐ´æ´¢µÄÊÇ¼üÖµ¶Ô£¬ÕÒµ½bucketÎ»ÖÃÖ®ºó£¬»áµ÷ÓÃkeys.equals()·½·¨È¥ÕÒµ½Á´±íÖÐÕýÈ·µÄ½Úµã£¬×îÖÕÕÒµ½ÒªÕÒµÄÖµ¶ÔÏó¡£
 
 ConcurrentHashMapÎªÊ²Ã´¸ßÐ§£¿
@@ -63,7 +74,6 @@ TreeMapÊµÏÖÁËSotredMap½Ó¿Ú£¬ËüÊÇÓÐÐòµÄ¼¯ºÏ¡£¶øÇÒÊÇÒ»¸öºìºÚÊ÷½á¹¹£¬Ã¿¸ökey-value¶
 
 
 
-HashMap
 HashMapÊÇ»ùÓÚÊý×éºÍÁ´±í/ºìºÚÊ÷ÊµÏÖµÄ¡£
 HashMapÄ¬ÈÏÈÝÁ¿ÊÇ16
 -
