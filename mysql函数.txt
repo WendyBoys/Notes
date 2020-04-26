@@ -1,0 +1,68 @@
+字符函数
+length('abc') --- 3 长度
+concat('xuan','-','yifan') --- xuan-yifan 拼接字符串
+upper() lower() 大小写
+substr('adcdef',3)--- cdef  sql语句中sub下标是从1开始 不同于java中的0开始
+substr('adcdef',1,3)--- abc
+instr('abcabedsadc','adc') --- 返回字串在主串中的下标 1 当有多个时 返回第一个 无时返回0
+trim('   a    ')--- a 
+trim('a' from 'aaaaaaaaa8a88aaaaa')---8a88   去除a 只去前后 中间的a为有效值 不去
+lpad('xuan',6,'*')--- **xuan 左填充  lpad('xuan',3,'*')  --- xua 填充 不足长度的补齐 低于长度从左截取
+rpad('xuan',6,'*')--- xuan** 左填充  rpad('xuan',3,'*')  --- xua
+replace('abcdefag','a','8')--8bcdef8g 全部替换
+
+数学函数
+
+round(1.5)--- 2  四舍五入
+round(1.5,2)--- 1.50 保留2位小数
+round(-1.5)  --- -1
+ceil(1.5)  --- 2  向上取整
+ceil(-1.5)  ---  -1
+floor(1.5) ---1  向下取整
+floor(-1.5) ---  -2
+truncate(-1.5555,2) ----  -1.55  截取到2位小数
+mod(10,3) ---1 取余 相当于10%3   a-a/b*b 为取余结果 ** a/b取整  例如10/3 =3
+
+日期函数
+now()  --- 2020-04-26 14:49:25  当前系统日期+时间
+curdate() ---  2020-04-26  当前系统日期
+curtime() --- 14:50:58  当前时间
+year('1999-02-3') --- 1999     年
+year(now()) --- 2020
+month(now()) ---4      月
+month('1999-05-01') ---5
+年月日小时分秒 都可  second(now)   day(now()) minute(now())
+monthname(now())  ---April  返回月份英文名称
+monthname('1999-5-1')   5   
+str_to_date('1999-5/01','%Y-%m/%d') ---1999-05-01 字符串转日期 格式应一一对应
+DATE_FORMAT('2020-04-26 14:49:25','%Y年%m月%d号%H点%i分%s秒') --- 2020年04月26号14点49分25秒  日期转字符串 
+%Y 四位年份  %y 两位年份  
+%m 月份(01，02，....11,12)   %c 月份 (1,2,3 .... 11,12) 但是用%c时 仍然输出 05 01 mysql默认格式问题
+%H 24小时制小时 %h 12小时制小时   
+%i 分钟  %s 秒
+
+其他函数
+version() 当前mysql版本
+database() 当前数据库
+user() 当前用户
+
+流程控制函数
+
+select if(10<5,'大于','小于') ---  小于  类似java三元表达式
+
+select salary 原始工资,dept_id 
+case dept_id 
+when 30 then salary*1.1
+when 40 then salary*1.5
+else salary
+end as 最终工资 from employees;     相当于java中的if - else if - else结构
+
+分组函数
+select sum(id) from user 查询user表id和 
+sum() 求和 avg() 平均数 min()最小值 max()最大值 count() 总个数
+sum avg  max min count 都忽略null  
+sum(distinct salary) 去掉重复再求和 以上函数都适用
+select count(*) select count(1) select count('常量') 都是查总个数  后面2个是加个临时列 统计
+在myisam引擎中 count(*) 快 innodb  count(*) 和count(1)差不多 但是比count(常量)快
+
+DATEDIFF('2020-04-26','1999-05-01') ---7666 相差天数
