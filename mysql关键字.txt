@@ -1,3 +1,16 @@
+group by
+查询列表 必须是分组函数 和groupby后面的字段
+select avg(salary) a,address from users where name like '%a%' group by address order by a desc;
+
+select count(*) c ,depid from user group by depid having c >2;
+查询 哪个部门人数大于2  因为count(* ) 不是user中的字段 不能够 where count(*) > 2 使用having即可
+where 不能使用别名c
+即 分组前筛选 使用where 分组后筛选使用having 优先使用where 效率高
+
+
+
+
+
 exists
 SELECT * FROM employees where not exists (select emp_no from dept_emp where dept_emp.emp_no = employees.emp_no )
 
