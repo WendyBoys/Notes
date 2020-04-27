@@ -44,6 +44,20 @@ ref----
 rows-----
 根据表统计信息及索引选用情况，大致估算出找到所需的记录所需要读取的行数图
 
+extra----
+1. Using filesort(出现这个就完蛋 效率极低 千万避免)
+说明mysq|会对数据使用一个外部的索引排序，而不是按照表内的索引顺序进行读取。MySQL中无法利用索引完成的排序操作称为“文件排序”
+2. Using temporary
+使了用临时表保存中间结果,MySQL在对查询结果排序时使用临时表。常见于排序orderby和分组查询groupby。
+
+3.Using index
+表示相应的select操作中使用了覆盖索引(Covering Index)， 避免访问了表的数据行，效率不错!
+如果同时出现usingwhere,表明索引被用来执行索引键值的查找;
+如果没有同时出现usingwhere，表明索引用来读取数据而非执行查找动作。
+4.Using where
+表示使用了where过滤
+5.Using join buffer
+使用了连接缓存
 
 当出现> < 类似的范围时 范围后面的索引会失效 导致sql效率下降 可以通过创建去掉范围字段的索引解决
 列如：查询浏览量大于1的最高浏览量文章
@@ -92,4 +106,7 @@ select * from test03 where c1= 'c1'and c2= 'a2' order by c4,c3;
 select * from test03 where c1= 'c1'and c2= 'a2' order by c3,c2;
 索引实际用了c1 c2，不会产生Usingsort 因为条件c2 已经是常量了
 
-group by基本上都要排序 会产生临时表 一定要顺序！
+group by基本上都要排序 会产生临时表 一定要按索引顺序！
+例如
+select ......   group  c1,c3  改成c1,c2,c3
+select ......   group c3  改成c1,c2,c3

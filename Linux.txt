@@ -1,7 +1,29 @@
  ssh登录  第一次很慢  cd  /var/log/btmp
  btmp存的是日志 当很大时会导致登录慢 极有可能被人暴力破解  失败次数过多导致文件过大 
-
 还有一种解决办法就是修改 /etc/ssh/sshd_config 文件，将其中的#UseDNS yes改为  UseDNS no  然后重启sshd服务 但是这个一般默认都是no  
+
+
+编写linux脚本
+touch demo.sh
+脚本第一行必须是 #! /bin/bash
+
+执行脚本 sh demo.sh   或者./demo.sh  但是vim编辑的sh脚本 默认没有执行权限
+使用  chmod +x demo.sh 即可增加执行权限 
+
+一、为所有 .sh 脚本添加执行权限
+chmod u+x *.sh，表示对当前目录下的file.sh文件的所有者增加可执行权限。
+u 代表所有者；
+x 代表执行权限；
++ 表示增加权限。
+二、为指定 .sh 脚本添加执行权限
+chmod u+x file1.sh，表示对当前目录下的 file1.sh 文件的所有者增加可执行权限。
+
+u 代表所有者；
+x 代表执行权限；
++ 表示增加权限。
+
+
+
 
 https://cdn.jsdelivr.net/gh/WendyBoys/cos/img/QQ截图20200309105859.png
 
