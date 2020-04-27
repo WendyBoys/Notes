@@ -65,3 +65,13 @@ git pull若也想简略
 然后git pull 即可
 中间遇到失败 可能是pull拉下来 没保存 应该add commit
 
+修改当前用户和邮箱 （邮箱和github不一致会导致提交不显示提交次数 坑爹！！）
+git config --global user.name "username"
+
+git config --global user.email "email"
+
+查看当前用户和邮箱
+
+git config user.name
+
+git config user.email

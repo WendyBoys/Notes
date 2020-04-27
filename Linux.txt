@@ -1,3 +1,8 @@
+ ssh登录  第一次很慢  cd  /var/log/btmp
+ btmp存的是日志 当很大时会导致登录慢 极有可能被人暴力破解  失败次数过多导致文件过大 
+
+还有一种解决办法就是修改 /etc/ssh/sshd_config 文件，将其中的#UseDNS yes改为  UseDNS no  然后重启sshd服务 但是这个一般默认都是no  
+
 https://cdn.jsdelivr.net/gh/WendyBoys/cos/img/QQ截图20200309105859.png
 
 https://api.ssrnode.cc/link/vvtSmywRIJWZ6oCq?sub=1

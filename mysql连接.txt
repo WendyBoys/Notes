@@ -1,0 +1,7 @@
+mysql 有 等值连接 、非等值连接、自连接 、外连接等
+等值连接 where a.id=b.aid;
+非等值连接 where a.id between b.min and b.max
+自连接  select a.id,a.name,b.id,b.name from employees a, employees b 
+where a.bid=b.id; (查询员工的上级id 姓名 上机也是员工 都在一个表)
+ ,   join  inner join 可以直接使用where a.id=b.aid            join     inner join 也可以使用on 
+left join  right join 要使用on where a.id=b.aid 
