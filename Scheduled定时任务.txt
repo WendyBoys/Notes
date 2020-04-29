@@ -1,10 +1,93 @@
 主启动类 加注解 @EnableScheduling 开启定时任务功能
 
+
  @Scheduled(cron = "*/2 * * * * ?")  2s执行一次
     public void timer()
     {
         System.out.println("666666");
     }
+
+
+注意******
+多个任务时 由于默认是单线程执行 会出现很大的问题 
+
+    @Scheduled(cron = "*/3 * * * * ?")
+
+    public void timer1()
+    {
+        Thread t = Thread.currentThread();
+        System.out.println("taskSchule1 "+ new Date().toLocaleString() +" ThreadID:"+  t.getId() +" "+t.getName());
+    }
+
+    @Scheduled(cron = "*/10 * * * * ?")
+
+    public void timer2()
+    {
+        Thread t = Thread.currentThread();
+        System.out.println("taskSchule2 begin "+ new Date().toLocaleString() +" ThreadID:"+  t.getId() +" "+t.getName());
+        try {
+            Thread.sleep(8000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        System.out.println("taskSchule2  end"+ new Date().toLocaleString() +" ThreadID:"+  t.getId() +" "+t.getName());
+
+    }
+
+
+
+第一个坑
+因为Spring中@EnableScheduling和@Scheduled标注的定时任务默认是单线程执行的，这里任务2执行任务需要花费超过8s的较长时间，所以阻塞了任务1的执行 任务1不会每3s执行一次 事实上会达到很多秒才执行一次 严重影响业务。
+
+
+解决方案：使用@Async和@EnableAsync异步执行任务
+事实上在Spring的定时任务包中提供了@EnableAsync和@Async注解用于多线程异步执行任务。
+首先在启动类上添加@EnableAsync注解，并在TestSchedule类上标注@Async注解，表示该类中所有标注了@Scheduled的方法都使用异步处理方式。
+
+此时，任务1和任务2均运行正常，并且任务1和任务2都是不同线程在执行，不会出现任务之间相互阻塞的情况。
+这里是解决了第一个坑的问题，但是实际上可能引入第二个坑。
+
+第二个坑
+
+这里我们稍作修改将任务2的睡眠时间改成11秒 Thread.sleep(11000);，此时任务2的执行时间已经超过了它的调度时间。再次运行程序：
+观察发现任务1正常执行，但是任务2中a、b和c、d两组出现了交叉，两组是不同线程执行的，因为任务2的执行时间超过了调度时间，所以，a处开始执行，在未执行完成的情况下，任务的调度时间到了，其他线程有立马调度了任务从c处开始执行。
+这是使用@EnableAsync和@Async可能会出现的问题。
+
+解决方案
+去掉@EnableAsync和@Async注解，去掉@EnableScheduling注解 
+创建一个任务配置类ScheduleConfig 实现SchedulingConfigurer接口的configureTasks方法，使用参数taskRegistrar为任务调度创建线程池
+
+@Configuration
+@EnableScheduling
+public class ScheduleConfig implements SchedulingConfigurer {
+
+   
+ @Override
+   
+ public void configureTasks(ScheduledTaskRegistrar taskRegistrar)
+ {
+    
+    taskRegistrar.setScheduler(taskExecutor());
+  
+  }
+
+   
+ @Bean(destroyMethod="shutdown")
+   
+ public Executor taskExecutor() {
+   
+     return Executors.newScheduledThreadPool(10);
+  
+  }
+
+}
+
+完美解决坑一加坑二！！！
+
+总结 ：
+SpringBoot中可以使用@EnableScheduling和@Scheduled注解实现定时任务调度，但是注意默认所有任务都被单个线程调度的，有可能任务之间发生阻塞现象，可以使用@EnableAsync和@Async注解实现异步多线程任务调度，但需要注意任务执行时间如果大于任务调度周期时间，可能出现同一个任务交叉执行的情况
+
+
 
 cronExpression定义时间规则，Cron表达式由6或7个空格分隔的时间字段组成：秒 分钟 小时 日期 月份 星期    年（可选）；
 
