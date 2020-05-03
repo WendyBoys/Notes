@@ -1,0 +1,82 @@
+***  可以考虑从内存,并发,缓存,安全,网络,系统等进行入手
+
+内存优化：
+Linux下修改
+TOMCAT_HOME/bin/catalina.sh
+ 在前面加入
+JAVA_OPTS="-server -XX:PermSize=512M -XX:MaxPermSize=1024m -Xms2048m -Xmx2048m
+
+Windows下修改
+TOMCAT_HOME/bin/catalina.bat
+ 在前面加入
+set JAVA_OPTS=-server -XX:PermSize=512M -XX:MaxPermSize=1024m -Xms2048m -Xmx2048m
+
+-server：启用 JDK的 server 版本；
+
+-Xms：Java虚拟机初始化时堆的最小内存，一般与 Xmx配置为相同值，这样的好处是GC不必再为扩展内存空间而消耗性能；
+
+-Xmx：Java虚拟机可使用堆的最大内存；
+
+-XX:PermSize：Java虚拟机永久代大小；
+
+-XX:MaxPermSize：Java虚拟机永久代大小最大值；
+
+最大堆内存是1024m，对于现在的硬件还是偏低（当然了 手里的破学生服务器之类的 分给它1g已经不错了），实施时，还是按照机器具体硬件配置优化。
+
+
+
+并发优化：
+
+<Connector port="80" protocol="HTTP/1.1" maxThreads="600" minSpareThreads="100" maxSpareThreads="500" acceptCount="700"
+connectionTimeout="20000" redirectPort="8443" />
+maxThreads="600"       ///最大线程数
+minSpareThreads="100"///初始化时创建的线程数
+maxSpareThreads="500"///一旦创建的线程超过这个值，Tomcat就会关闭不再需要的socket线程。
+acceptCount="700"//指定当所有可以使用的处理请求的线程数都被使用时，可以放到处理队列中的请求数，超过这个数的请求将不予处理
+
+ 
+
+这里是http connector的优化，如果使用apache和tomcat做集群的负载均衡，并且使用ajp协议做apache和tomcat的协议转发，那么还需要优化ajp connector。
+
+<Connector port="8009" protocol="AJP/1.3" maxThreads="600" minSpareThreads="100" maxSpareThreads="500" acceptCount="700"
+connectionTimeout="20000" redirectPort="8443" />
+ 
+
+由于tomcat有多个connector，所以tomcat线程的配置，又支持多个connector共享一个线程池。
+
+首先。打开/conf/server.xml，增加
+
+<Executor name="tomcatThreadPool" namePrefix="catalina-exec-" maxThreads="500" minSpareThreads="20" maxIdleTime="60000" />
+最大线程500（一般服务器足以），最小空闲线程数20，线程最大空闲时间60秒。
+
+ 
+
+然后，修改<Connector ...>节点，增加executor属性，executor设置为线程池的名字：
+
+<Connector executor="tomcatThreadPool" port="80" protocol="HTTP/1.1"  connectionTimeout="60000" keepAliveTimeout="15000" maxKeepAliveRequests="1"  redirectPort="443" />
+可以多个connector公用1个线程池，所以ajp connector也同样可以设置使用tomcatThreadPool线程池。
+
+
+禁用DNS
+
+当web应用程序向要记录客户端的信息时，它也会记录客户端的IP地址或者通过域名服务器查找机器名 转换为IP地址。
+
+DNS查询需要占用网络，并且包括可能从很多很远的服务器或者不起作用的服务器上去获取对应的IP的过程，这样会消耗一定的时间。
+
+修改server.xml文件中的Connector元素，修改属性enableLookups参数值: enableLookups="false"
+
+如果为true，则可以通过调用request.getRemoteHost()进行DNS查询来得到远程客户端的实际主机名，若为false则不进行DNS查询，而是返回其ip地址
+
+
+
+
+*****************开启APR模式
+
+BIO模式：阻塞式I/O操作，表示Tomcat使用传统Java I/O操作。默认情况下，Tomcat7以下版本使用BIO模式运行，由于每个请求都要创建一个线程来处理，线程开销较大，不能处理高并发的场景，在三种模式中性能最低。
+NIO模式：是Java SE 1.4及后续版本提供的一种新I/O操作方式。是一个基于缓冲区，并能够提供非阻塞I/O操作的JAVA API，它拥有比传统I/O操作（BIO模式）更好的并发运行性能。在Tomcat7中启用NIO模式，需要server.xml配置文件支持。
+
+protocol="org.apache.coyote.http11.Http11NioProtocol"
+
+在Tomcat 8以上版本，默认就是使用NIO模式，不需要做额外的修改。
+
+APR模式：简单的理解就是从操作级别解决异步IO问题，大幅度的提高服务器的性能和响应性能，也是Tomcat运行高并发应用的首选模式。从Tomcat 7.0.30开始，Tomcat默认支持apr。在这，主要说明APR模式的开启。

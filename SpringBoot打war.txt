@@ -1,0 +1,22 @@
+pom.xml 中添加<packaging>war</packaging>    不写packing 默认是jar
+添加依赖 
+ <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-tomcat</artifactId>
+            <scope>provided</scope>
+  </dependency>
+
+覆盖掉内置的tomcat
+
+添加启动类
+
+public class ServletInitializer extends SpringBootServletInitializer {
+    @Override
+    protected SpringApplicationBuilder configure(SpringApplicationBuilder application){
+        //指定 @SpringBootApplication 所在类
+        return application.sources(Application.class);
+    }
+}
+
+之后正常打包即可 
+注意： 打包后 yml或者pro配置文件中的tomcat配置会失效 比如端口  项目访问路径 一切遵循外置tomcat 
