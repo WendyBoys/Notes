@@ -1,0 +1,28 @@
+String str="0371-8118615";
+String s="0\\d{3}-\\d{7}"; 匹配0开头 3位数字加-再7位数字 
+boolean matches = Pattern.matches(s,str);   (true)
+
+
+Pattern p = Pattern.compile("([a-z]+)([0-9]+)"); 分为2组 一组字母 一组数字
+		
+Matcher m = p.matcher("aa232*.ssd445-*sds223");
+		 
+while(m.find()){
+		
+	System.out.println(m.group(1));  
+
+
+
+	System.out.println(m.group(2));
+}
+aa
+232
+ssd
+445
+sds
+223
+
+m.group(0)
+aa232
+ssd445
+sds223
