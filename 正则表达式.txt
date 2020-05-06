@@ -26,3 +26,9 @@ m.group(0)
 aa232
 ssd445
 sds223
+
+
+
+Pattern p = Pattern.compile("([a-zA-Z]+)"); Æ¥Åä×ÖÄ¸
+
+Pattern p = Pattern.compile("([0-9]+)"); Æ¥ÅäÊı×Ö
