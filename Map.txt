@@ -4,6 +4,11 @@ HashMapÔÚµ×²ãÊý¾Ý½á¹¹ÉÏ²ÉÓÃÁËÊý×é£«Á´±í£«ºìºÚÊ÷£¬Í¨¹ýÉ¢ÁÐÓ³ÉäÀ´´æ´¢¼üÖµ¶ÔÊý¾ÝÒòÎ
 
 Ä¬ÈÏµÄ¸ºÔØÒò×Ó´óÐ¡Îª0.75£¬Ò²¾ÍÊÇËµ£¬µ±Ò»¸ömapÌîÂúÁË75%µÄbucketÊ±ºò£¬ºÍÆäËü¼¯ºÏÀà(ÈçArrayListµÈ)Ò»Ñù£¬½«»á´´½¨Ô­À´HashMap´óÐ¡µÄÁ½±¶µÄbucketÊý×é£¬À´ÖØÐÂµ÷ÕûmapµÄ´óÐ¡£¬²¢½«Ô­À´µÄ¶ÔÏó·ÅÈëÐÂµÄbucketÊý×éÖÐ¡£Õâ¸ö¹ý³Ì½Ð×÷rehashing£¬ÒòÎªËüµ÷ÓÃhash·½·¨ÕÒµ½ÐÂµÄbucketÎ»ÖÃ¡£
 
+
+0.75 ÊÇ¿Õ¼äºÍÊ±¼ä×îÓÅµÄ 0.5£¨ÀË·Ñ¿Õ¼ä £© ÀË·Ñ¿Õ¼ä 1£¨´óÁ¿³åÍ» µ¼ÖÂÁ´±í³¤ ²éÑ¯Ê±¼äÔö³¤£©ÀË·ÑÊ±¼ä
+³õÊ¼´óÐ¡Îª2µÄÖ¸ÊýÃÝ Èç¹û²»ÊÇ ±ÈÈç13 »á×Ô¶¯×ª»»Îª16 À©ÈÝ²ÉÈ¡Î»ÔËËã¶ø·ÇÈ¡Ä£ÔËËã £¨Ð§ÂÊ£© Î»ÔËËãÎªÁË·ÀÖ¹Êý×éÔ½½çÎ»ÔËËã±ØÐëÊÇ2µÄÖ¸ÊýÃÝ
+
+
 ¾ßÌåµÄput¹ý³Ì
 
 1.¶Ôkey¡¯Öµ½øÐÐÇóhashÖµ£¬È»ºóÔÙ¼ÆËãÏÂ±ê¡£
