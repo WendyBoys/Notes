@@ -38,3 +38,27 @@ DOM解析
 　　　　　　1、编码比较麻烦。
 
 　　　　　　2、很难同时访问XML文件中的多处不同数据。
+
+
+
+***   a.xml为resources下的文件（springboot）
+       //解析
+        Document document = null;
+        try {
+            document = Jsoup.parse(ResourceUtils.getFile("classpath:a.xml"), "utf-8");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        //获取元素
+        Elements elements = document.getElementsByTag("name");
+        
+        //获取数据
+        for (int i = 0; i < elements.size(); i++) {
+            System.out.println(elements.get(i).text());
+        }
+
+
+构造方法 支持file string 网络url xml文件
+public static Document parse(File in,String charsetName)throws IOException
+ public static Document parse(String html)
+public static Document parse(URL url,int timeoutMillis)throws IOException
