@@ -64,7 +64,7 @@ ArrayList扩容机制，按原数组长度的1.5倍扩容。
 
 
 CopyOnWriteArrayList
-CopyOnWriteArrayList是线程同步的数组集合。
+   CopyOnWriteArrayList是线程同步的数组集合。
 CopyOnWriteArrayList使用场景主要是多线程环境下，查询、遍历操作明显多于增加、删除操作。
 - CopyOnWriteArrayList默认容量是0，从0开始
 - 

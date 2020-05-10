@@ -79,3 +79,24 @@ List：和数组类似，List可以动态增长，查找元素效率高，插入删除元素效率低，因为会引
 LinkedList、ArrayList、HashSet是非线程安全的，Vector是线程安全的;
 HashMap是非线程安全的，HashTable是线程安全的;
 StringBuilder是非线程安全的，StringBuffer是线程安全的。
+
+类中的数据成员和成员函数据具有的访问权限包括：public、private、protect、default（包访问权限）
+作用域		
+	当前类	同一package	子孙类	其他package
+ 
+public   	√    	     √         	     √            	√ 
+
+protected   √               √                              √      		 × 
+
+default     √                   √                              ×                     × 
+
+private     √                     ×                           ×                       × 
+
+
+public           所有类可见
+
+protected      	 本包和所有子类都可见（本包中的子类非子类均可访问，不同包中的子类可以访问，不是子类不能访问）
+
+default          本包可见（即默认的形式）（本包中的子类非子类均可访问，不同包中的类及子类均不能访问）
+
+priavte          本类可见
