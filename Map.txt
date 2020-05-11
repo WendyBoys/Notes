@@ -97,7 +97,27 @@ HashMapÄ¬ÈÏÈÝÁ¿ÊÇ16
 ConcurrentHashMap Í¬HashMap
 
 
+1.7
+ConcorrentHashMap ÊµÏÖÁË ConcorrentMap ½Ó¿Ú£¬ÄÜÔÚ²¢·¢»·¾³ÊµÏÖ¸ü¸ßµÄÍÌÍÂÁ¿£¬¶øÔÚµ¥Ïß³Ì»·¾³ÖÐÖ»ËðÊ§ºÜÐ¡µÄÐÔÄÜ£»
+²ÉÓÃ·Ö¶ÎËø£¬Ê¹µÃÈÎÒâÊýÁ¿µÄ¶ÁÈ¡Ïß³Ì¿ÉÒÔ²¢·¢µØ·ÃÎÊ Map£¬Ò»¶¨ÊýÁ¿µÄÐ´ÈëÏß³Ì¿ÉÒÔ²¢·¢µØÐÞ¸Ä Map£»
+²»»áÅ×³ö ConcorrentModificationException£¬Ëü·µ»Øµü´úÆ÷¾ßÓÐ¡°ÈõÒ»ÖÂÐÔ¡±£¬¼´¿ÉÒÔÈÝÈÌ²¢·¢ÐÞ¸Ä£¬µ«²»±£Ö¤½«ÐÞ¸Ä²Ù×÷·´Ó³¸øÈÝÆ÷£»
+size() µÄ·µ»Ø½á¹û¿ÉÄÜÒÑ¾­¹ýÆÚ£¬Ö»ÊÇÒ»¸ö¹À¼ÆÖµ£¬²»¹ý size() ºÍ isEmpty() ·½·¨ÔÚ²¢·¢»·¾³ÖÐÓÃµÄÒ²²»¶à£»
+Ëø·Ö¶Î£º ²»Í¬Ïß³ÌÔÚÍ¬Ò»Êý¾ÝµÄ²»Í¬²¿·ÖÉÏ²»»á»¥Ïà¸ÉÈÅ£¬ÀýÈç£¬ConcurrentHashMap Ö§³Ö 16 ¸ö²¢·¢µÄÐ´ÈëÆ÷£¬ÊÇÓÃ 16 ¸öËøÀ´ÊµÏÖµÄ¡£ËüµÄÊµÏÖÔ­ÀíÈçÏÂ£º
+
+Ê¹ÓÃÁËÒ»¸ö°üº¬ 16 ¸öËøµÄÊý×é£¬Ã¿¸öËø±£»¤ËùÓÐÉ¢ÁÐÍ°µÄ 1/16£¬ÆäÖÐµÚ N ¸öÉ¢ÁÐÍ°ÓÉµÚ£¨N % 16£©¸öËøÀ´±£»¤£»
+
+Õâ´óÔ¼ÄÜ°Ñ¶ÔÓÚËøµÄÇëÇó¼õÉÙµ½Ô­À´µÄ 1/16£¬Ò²ÊÇ ConcurrentHashMap ×î¶àÄÜÖ§³Ö 16 ¸öÏß³ÌÍ¬Ê±Ð´ÈëµÄÔ­Òò£»
+
+¶ÔÓÚ ConcurrentHashMap µÄ size() ²Ù×÷£¬ÎªÁË±ÜÃâÃ¶¾ÙÃ¿¸öÔªËØ£¬ConcurrentHashMap ÎªÃ¿¸ö·Ö¶Î¶¼Î¬»¤ÁËÒ»¸ö¶ÀÁ¢µÄ¼ÆÊý£¬²¢Í¨¹ýÃ¿¸ö·Ö¶ÎµÄËøÀ´Î¬»¤Õâ¸öÖµ£¬¶ø²»ÊÇÎ¬»¤Ò»¸öÈ«¾Ö¼ÆÊý£»
+
+
+
 1.8Ö®Ç°ÊÇ·Ö¶Î 1.8¼°ÒÔºóÊÇsychonizer¹Ø¼ü×Ö¼Ócas
+
+1.8 ConcurrentHashMap È¡ÏûÁË Segment ·Ö¶ÎËø£¬²ÉÓÃ CAS ºÍ synchronized À´±£Ö¤²¢·¢°²È«¡£Êý¾Ý½á¹¹¸ú HashMap1.8 µÄ½á¹¹ÀàËÆ£¬Êý×é + Á´±í / ºìºÚ¶þ²æÊ÷¡£
+
+synchronized Ö»Ëø¶¨µ±Ç°Á´±í»òºìºÚ¶þ²æÊ÷µÄÊ×½Úµã£¬ÕâÑùÖ»Òª hash ²»³åÍ»£¬¾Í²»»á²úÉú²¢·¢£¬Ð§ÂÊÓÖÌáÉý N ±¶¡£
+
 
 casÈ«³ÆÎªCompare-and-Swap£¨±È½Ï²¢½»»»£©£¬ÓÐ3¸ö²Ù×÷Êý£¬·Ö±ðÊÇÄÚ´æÎ»ÖÃV¡¢¾ÉµÄµÄÔ¤ÆÚÖµA¡¢ÐÂÖµB£¬ÄÇÃ´µ±ÇÒ½öµ±V·ûºÏ¾ÉµÄÔ¤ÆÚÖµAÊ±£¬´¦ÀíÆ÷ÓÃÐÂÖµB¸üÐÂVµÄÖµÎªB¡£²¢ÇÒÕâÐ©´¦Àí¹ý³ÌÓÐÖ¸Áî¼¯µÄÖ§³Ö£¬Òò´Ë¿´ËÆ¶Á-Ð´-¸Ä²Ù×÷Ö»ÊÇÒ»¸öÔ­×Ó²Ù×÷£¬ËùÒÔ²»´æÔÚÏß³Ì°²È«ÎÊÌâ
 
@@ -109,8 +129,8 @@ casÈ«³ÆÎªCompare-and-Swap£¨±È½Ï²¢½»»»£©£¬ÓÐ3¸ö²Ù×÷Êý£¬·Ö±ðÊÇÄÚ´æÎ»ÖÃV¡¢¾ÉµÄµÄÔ¤Æ
 
 ½â¾ö·½°¸£ºABAÎÊÌâ¿ÉÒÔ¶ÔÃ¿¸öÖµÌí¼ÓÒ»¸ö°æ±¾ºÅÀ´ÅÐ¶Ï¡£
 
-°æÈ¨ÉùÃ÷£º±¾ÎÄÎªCSDN²©Ö÷¡¸qq_37685457¡¹µÄÔ­´´ÎÄÕÂ£¬×ñÑ­CC 4.0 BY-SA°æÈ¨Ð­Òé£¬×ªÔØÇë¸½ÉÏÔ­ÎÄ³ö´¦Á´½Ó¼°±¾ÉùÃ÷¡£
-Ô­ÎÄÁ´½Ó£ºhttps://blog.csdn.net/qq_37685457/article/details/89889254
+
+
 
 HashtableÄ¬ÈÏÈÝÁ¿ÊÇ11(HashtableÄ¬ÈÏ´óÐ¡ÊÇ11ÊÇÒòÎª³ý£¨½üËÆ£©ÖÊÊýÇóÓàµÄ·ÖÉ¢Ð§¹ûºÃ£º)
 
