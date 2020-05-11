@@ -100,3 +100,55 @@ protected      	 ±¾°üºÍËùÓĞ×ÓÀà¶¼¿É¼û£¨±¾°üÖĞµÄ×ÓÀà·Ç×ÓÀà¾ù¿É·ÃÎÊ£¬²»Í¬°üÖĞµÄ×ÓÀ
 default          ±¾°ü¿É¼û£¨¼´Ä¬ÈÏµÄĞÎÊ½£©£¨±¾°üÖĞµÄ×ÓÀà·Ç×ÓÀà¾ù¿É·ÃÎÊ£¬²»Í¬°üÖĞµÄÀà¼°×ÓÀà¾ù²»ÄÜ·ÃÎÊ£©
 
 priavte          ±¾Àà¿É¼û
+
+
+String ²»±äĞÔµÄÀí½â
+String ÀàÊÇ final µÄ£¬²»ÄÜ±»¼Ì³Ğ£¬ÎÒÃÇÊÇ²»ÄÜ¼Ì³ĞËü¸ÄÔìËüµÄ¡£
+Ê¹ÓÃ ¡°+¡± Á¬½Ó×Ö·û´®Ê±²»ÊÇÔÚÔ­ÓĞµÄ×Ö·û´®ÉÏ½øĞĞĞŞ¸Ä£¬¶øÊÇ´´½¨ĞÂµÄ×Ö·û´®¡£
+ÔÚ Java ÖĞ£¬Í¨¹ıÊ¹ÓÃ ¡°+¡± ·ûºÅÀ´´®Áª×Ö·û´®µÄÊ±ºò£¬Êµ¼ÊÉÏµ×²ã»á×ª³ÉÍ¨¹ı StringBuilder ÊµÀıµÄ append() ·½·¨À´ÊµÏÖ¡£
+String s = new String("Hello world"); ¿ÉÄÜ´´½¨Á½¸ö¶ÔÏóÒ²¿ÉÄÜ´´½¨Ò»¸ö¶ÔÏó¡£Èç¹û¾²Ì¬ÇøÖĞÓĞ "Hello world" ×Ö·û´®³£¶ÔÏóµÄ»°£¬Ôò½ö½öÔÚ¶ÑÖĞ´´½¨Ò»¸ö¶ÔÏó¡£Èç¹û¾²Ì¬ÇøÖĞÃ»ÓĞ "Hello world" ¶ÔÏó£¬Ôò¶ÑÉÏºÍ¾²Ì¬ÇøÖĞ¶¼ĞèÒª´´½¨¶ÔÏó¡£
+
+
+Ö»Òª¶ÔÏóÊµÏÖÁË Serializable ½Ó¿Ú£¬Õâ¸ö¶ÔÏó¾Í¿ÉÒÔÍ¨¹ıÈçÏÂ·½·¨½øĞĞĞòÁĞ»¯ºÍ·´ĞòÁĞ»¯ ( ×¢Òâ£º Serializable ½Ó¿Ú½ö½öÊÇÒ»¸ö±ê¼Ç½Ó¿Ú£¬ÀïÃæÃ»ÓĞÈÎºÎ·½·¨ )£º
+
+ĞòÁĞ»¯£º
+
+// ´´½¨Ò»¸ö OutputStream Á÷²¢½«Æä·â×°ÔÚÒ»¸ö ObjectOutputStream ¶ÔÏóÄÚ¡£
+ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("worm.out"));
+// µ÷ÓÃ ObjectOutputStream ¶ÔÏóµÄ writeObject() ·½·¨£¬¼´¿É½«¶ÔÏó wa ĞòÁĞ»¯¡£
+out.writeObject(wa);
+·´ĞòÁĞ»¯£º
+
+// ´´½¨Ò»¸ö InputStream Á÷²¢½«Æä·â×°ÔÚÒ»¸ö ObjectInputStream ¶ÔÏóÄÚ¡£
+ObjectInputStream in = new ObjectInputStream(new FileInputStream("worm.out"));
+// µ÷ÓÃ ObjectInputStream ¶ÔÏóµÄ readObject() ·½·¨£¬¿É»ñµÃÒ»¸öÏòÉÏ×ªĞÍµÄ Object ¶ÔÏóÒıÓÃ£¬È»ºó½«»ñµÃµÄ Object ¶ÔÏóÏòÏÂ×ªĞÍ¼´¿É¡£
+Worm newWa = (Worm) in.readObject();
+
+
+
+·ºĞÍ <?> Óë <T> µÄÇø±ğ
+public static <T> void show1(List<T> list){
+    for (Object object : list) {
+    	System.out.println(object.toString());
+    }
+}
+public static void show2(List<?> list) {
+    for (Object object : list) {
+    	System.out.println(object);
+    }
+}
+public static void test(){
+    List<Student> list1 = new ArrayList<>();
+    list1.add(new Student("zhangsan",18,0));
+    list1.add(new Student("lisi",28,0));
+    list1.add(new Student("wangwu",24,1));
+    // ÕâÀïÈç¹û add(new Teacher(...)); ¾Í»á±¨´í£¬ÒòÎªÎÒÃÇÒÑ¾­¸ø List Ö¸¶¨ÁËÊı¾İÀàĞÍÎª Student
+    show1(list1);
+    System.out.println("************·Ö¸îÏß**************");
+    // ÕâÀïÎÒÃÇ²¢Ã»ÓĞ¸ø List Ö¸¶¨¾ßÌåµÄÊı¾İÀàĞÍ£¬¿ÉÒÔ´æ·Å¶àÖÖÀàĞÍÊı¾İ
+    List list2 = new ArrayList<>();
+    list2.add(new Student("zhaoliu",22,1));
+    list2.add(new Teacher("sunba",30,0));
+    // ´Ó show2 ·½·¨¿ÉÒÔ¿´³öºÍ show1 µÄÇø±ğÁË£¬list2 ´æ·ÅÁË Student ºÍ Teacher Á½ÖÖÀàĞÍ£¬Í¬Ñù¿ÉÒÔÊä³öÊı¾İ
+    show2(list2);
+}

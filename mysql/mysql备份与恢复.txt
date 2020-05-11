@@ -1,0 +1,18 @@
+备份
+在 MySQL 外执行：
+
+mysqldump -u用户名 -p密码 数据库名>生成的脚本文件路径
+mysqldump -uroot -p123 mydb1>C:\mydb1.sql
+恢复
+第一种方式：
+
+先在数据库中创建一个空的要恢复的数据库，然后退出数据库
+然后执行：mysql -u用户名 -p密码 数据库<脚本文件路径
+mysql -u用户名 -p密码 数据库<脚本文件路径
+mysql -uroot -p123 mydb1<C:\mydb1.sql
+第二种方式：
+
+先在数据库中创建一个空的要恢复的数据库
+然后执行：source SQL脚本路径
+mysql -u用户名 -p密码
+sourse C:\mydb1.sql

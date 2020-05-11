@@ -1,0 +1,5 @@
+SQL语句分类
+DDL (Data Definition Language)：数据库或表的结构操作
+DML (Data Manipulation Language)：对表的记录进行更新（增、删、改）
+DQL (Data Query Language)：对表的记录的查询
+DCL (Data Control Language)：对用户的创建，及授权
