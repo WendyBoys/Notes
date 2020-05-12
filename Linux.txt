@@ -38,6 +38,7 @@ https://taggood.xyz/
 
 rm -rf 删除文件夹和里面的文件
 ps aux|grep 进程名
+netstat -lnp|grep 80
 
 松阿里云
 a1360873209
@@ -62,7 +63,7 @@ docker cp demo.war tomcat:/usr/local/tomcat/webapps
 
  
 nohup java -jar market.jar >logs.log &
-netstat -lnp|grep 80
+
 kill xxxx
 
 yum search java | grep -i --color jdk

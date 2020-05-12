@@ -55,6 +55,7 @@ ArrayList的缺点
 
 
 ArrayList
+ 
 ArrayList默认容量是10
 
 ArrayList最大容量Integer.MAX_VALUE - 8

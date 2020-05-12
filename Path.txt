@@ -10,3 +10,5 @@ String path= Paths.get(System.getProperty("user.dir")).getParent().toString();
  String path= Paths.get(System.getProperty("user.dir"),"data","img").toString();
 C:\Users\Xiaoxiaoxuan\ideaProject\song变为
 C:\Users\Xiaoxiaoxuan\ideaProject\song\data\img
+
+SpringBoot 获取resource下文件 ResourceUtils.getFile("classpath:a.txt");
