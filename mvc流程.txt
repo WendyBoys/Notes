@@ -1,0 +1,20 @@
+ Spring MVC主要包括： 
+      1. 前端控制器组件（DispatcherServlet） 
+      2. 处理器组件（Controller） 
+      3. 处理器映射器组件（HandlerMapping） 
+      4. 处理器适配器组件（HandlerAdapter） 
+      5. 拦截器组件（HandlerInterceptor） 
+      6. 视图解析器组件（ViewResolver） 
+      7. 视图组件（View） 
+      8. 数据转换组件（DataBinder） 
+      9. 消息转换器组件（HttpMessageConverter）
+
+整个处理过程从一个HTTP请求开始： 
+      1、可发发起HTTP请求 
+      2、DispatcherServlet接收到请求后，根据对应配置文件中配置的处理器映射，找到对应的处理器映射项（HandlerMapping、HandlerExecutionChain），根据配置的映射规则，找到对应的处理器（Handler）和拦截器 
+      3、调用相应处理器处理器适配器 
+      4、转换消息和数据，执行响应拦截器处理方法 
+      5、调用相应处理器（Handler， 即Controller类）中的处理方法，处理该请求，处理器处理结束后会将一个ModelAndView类型的数据传给DispatcherServlet，这其中包含了处理结果的视图和视图中要使用的数据 
+      6、DispatcherServlet根据得到的ModelAndView中的视图对象，找到一个合适的ViewResolver（视图解析器） 
+      7、根据视图解析器的配置，DispatcherServlet将视图要显示的数据传给对应的视图 
+      8、最后给浏览器构造一个HTTP响应。

@@ -1,0 +1,76 @@
+构造器循环依赖  项目启动失败，发现了一个cycle
+@Service
+public class A {  
+    public A(B b) {  }
+}
+
+@Service
+public class B {  
+    public B(C c) {  
+    }
+}
+
+@Service
+public class C {  
+    public C(A a) {  }
+}
+
+field属性注入循环依赖  项目启动成功
+
+@Service
+public class A1 {  
+    @Autowired  
+    private B1 b1;
+}
+
+@Service
+public class B1 {  
+    @Autowired  
+    public C1 c1;
+}
+
+@Service
+public class C1 {  
+    @Autowired  public A1 a1;
+}
+
+field属性注入循环依赖（prototype）   项目启动失败，发现了一个cycle
+
+@Service
+@Scope("prototype")
+public class A1 {  
+    @Autowired  
+    private B1 b1;
+}
+
+@Service
+@Scope("prototype")
+public class B1 {  
+    @Autowired  
+    public C1 c1;
+}
+
+@Service
+@Scope("prototype")
+public class C1 {  
+    @Autowired  public A1 a1;
+}
+
+
+总结一下结论：
+
+
+1、构造器注入和prototype类型的field注入发生循环依赖时都无法初始化
+
+
+2、field注入单例的bean时，尽管有循环依赖，但bean仍然可以被成功初始化
+
+
+
+本质就是三级缓存发挥作用，解决了循环
+
+ singletonFactories ： 单例对象工厂的cache 
+ earlySingletonObjects ：提前暴光的单例对象的Cache 。【用于检测循环引用，与singletonFactories互斥】
+ singletonObjects：单例对象的cache
+
+Spring在InstantiateBean时执行构造器方法，构造出实例，如果是单例的话，会将它放入一个singletonBeanFactory的缓存中，再进行populateBean方法，设置属性。通过一个singletonBeanFactory的缓存解决了循环依赖的问题。

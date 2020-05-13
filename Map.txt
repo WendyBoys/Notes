@@ -112,7 +112,7 @@ size() 的返回结果可能已经过期，只是一个估计值，不过 size() 和 isEmpty() 方法在并
 
 
 
-1.8之前是分段 1.8及以后是sychonizer关键字加cas
+1.8之前是分段 1.8及以后是synchronized 关键字加cas
 
 1.8 ConcurrentHashMap 取消了 Segment 分段锁，采用 CAS 和 synchronized 来保证并发安全。数据结构跟 HashMap1.8 的结构类似，数组 + 链表 / 红黑二叉树。
 

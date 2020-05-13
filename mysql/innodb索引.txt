@@ -1,4 +1,4 @@
-innodb使用聚集索引 mysam是非聚集
+innodb主键使用聚集索引 myisam主键是非聚集
 
 表数据文件本身就是按B + Tree组织的一个索引结构文件
 
