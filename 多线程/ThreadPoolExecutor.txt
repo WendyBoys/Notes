@@ -1,5 +1,5 @@
-ThreadPoolExecutor			|
----------------------------
+ThreadPoolExecutor	
+--------------------------
 	# 线程池的实现
 	# 构造方法
 		ThreadPoolExecutor(int corePoolSize,int maximumPoolSize,long keepAliveTime,TimeUnit unit,BlockingQueue<Runnable> workQueue)

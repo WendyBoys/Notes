@@ -1,0 +1,70 @@
+1、@Transactional 应用在非 public 修饰的方法上
+注意： protected 、 private 修饰的方法上使用 @Transactional 注解，虽然事务无效，但不会有任何报错，这是我们很容犯错的一点。
+
+2、数据库引擎要不支持事务
+数据库引擎要支持事务，如果是MySQL，注意表要使用支持事务的引擎，比如innodb，如果是myisam，事务是不起作用的。
+
+3、@由于propagation 设置错误，导致注解失效
+propagation 属性我们知道
+
+TransactionDefinition.PROPAGATION_SUPPORTS
+
+如果当前存在事务，则加入该事务；如果当前没有事务，则以非事务的方式继续运行。
+
+TransactionDefinition.PROPAGATION_NOT_SUPPORTED
+
+以非事务方式运行，如果当前存在事务，则把当前事务挂起。
+
+TransactionDefinition.PROPAGATION_NEVER
+
+以非事务方式运行，如果当前存在事务，则抛出异常。
+
+当我们将propagation 属性设置为上述三种时，@Transactional 注解就不会产生效果
+
+4、rollbackFor 设置错误，@Transactional 注解失效
+上述我们解读rollbackFor 属性的时候我们知道
+
+rollbackFor 可以指定能够触发事务回滚的异常类型。
+
+Spring默认抛出了未检查 unchecked 异常（继承自 RuntimeException 的异常）或者 Error 才回滚事务；
+
+其他异常不会触发回滚事务。如果在事务中抛出其他类型的异常，但却期望 Spring 能够回滚事务，就需要指定 rollbackFor 属性。
+
+
+5、方法之间的互相调用也会导致@Transactional失效
+我们来看下面的场景：
+
+比如有一个类User，它的一个方法A，A再调用本类的方法B（不论方法B是用public还是private修饰），但方法A没有声明注解事务，而B方法有。则外部调用方法A之后，方法B的事务是不会起作用的。这也是经常犯错误的一个地方。
+
+那为啥会出现这种情况？其实这还是由于使用 Spring AOP 代理造成的，因为只有当事务方法被当前类以外的代码调用时，才会由 Spring 生成的代理对象来管理。
+
+
+6、异常被你的 catch“吃了”导致@Transactional失效
+这种情况是最常见的一种@Transactional注解失效场景，
+
+  @Transactional
+  private Integer A() throws Exception {
+      int insert = 0;
+      try {
+          User user = new User();
+          user.setCityName("javaHuang");
+          user.setUserId(1);
+          /**
+            * A 插入字段为 javaHuang的数据
+            */
+          insert = userMapper.insert(user);
+          /**
+            * B 插入字段为 topJavaer的数据
+            */
+          b.insertB();
+      } catch (Exception e) {
+          e.printStackTrace();
+      }
+  }
+如果B方法内部抛了异常，而A方法此时try catch了B方法的异常，那这个事务就不能正常回滚，而是会报出异常
+
+解决方法：
+
+第一声明事务的时候加上rollback=‘exception’
+
+第二 cath代码块里面手动回滚
