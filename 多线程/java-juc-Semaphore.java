@@ -10,6 +10,9 @@ Semaphore					|
 		* permits 资源同时访问线程的最大数量
 		* fair 是否是公平锁
 	
+	在 semaphore.acquire() 和 semaphore.release()之间的代码，同一时刻只允许制定个数的线程进入，
+	
+	
 	# 函数
 		void acquire()
 			* 获取一个令牌,如果不足,则阻塞

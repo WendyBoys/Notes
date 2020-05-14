@@ -15,4 +15,4 @@ mysql -uroot -p123 mydb1<C:\mydb1.sql
 先在数据库中创建一个空的要恢复的数据库
 然后执行：source SQL脚本路径
 mysql -u用户名 -p密码
-sourse C:\mydb1.sql
+source C:\mydb1.sql
