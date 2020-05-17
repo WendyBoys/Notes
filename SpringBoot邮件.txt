@@ -1,0 +1,46 @@
+ <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+ </dependency>
+
+
+***yml
+
+spring:
+  mail:
+    host: smtp.163.com
+    password: USOQTYRNZEBBQZXJ  授权码 并非密码 默认端口25 
+    username: 15290830501@163.com
+    default-encoding: UTF-8
+
+
+ @Autowired
+    JavaMailSender javaMailSender;
+
+
+@Test
+    public void mail()
+    {
+            SimpleMailMessage simpleMailMessage=new SimpleMailMessage();
+            simpleMailMessage.setFrom("123@qq.com");
+            simpleMailMessage.setTo("456@123.com");
+            simpleMailMessage.setSubject("数梦工场");
+            simpleMailMessage.setText("欢迎您加入数梦工场");
+            javaMailSender.send(simpleMailMessage);
+    }
+
+    @Test
+    public void mimeMail() throws MessagingException, FileNotFoundException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mimeMessageHelper=new MimeMessageHelper(mimeMessage,true); //true表示带附件
+        mimeMessageHelper.setFrom(username);
+        mimeMessageHelper.setSubject("带文件得邮件");
+        mimeMessageHelper.setTo("709027500@qq.com");
+        mimeMessageHelper.setText("<h1>文字描述</h1><br/>" +
+                "" +
+                "" +
+                "<img src='http://39.98.230.52:8080/upload/jVmCD08339.png' />",true); //true表示解析html 
+        mimeMessageHelper.addAttachment("新名字.png",new File("d:/hotDog.jpg"));  //发现 jpg 可以自动转为png
+        mimeMessageHelper.addAttachment("app.txt", ResourceUtils.getFile("classpath:application.yml"));// 简单文本 也可以自动转换
+        javaMailSender.send(mimeMessage);
+    }
