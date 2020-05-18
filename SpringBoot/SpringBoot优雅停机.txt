@@ -1,0 +1,64 @@
+@RestController
+public class DemoController {
+	@GetMapping("/demo")
+	public String demo() throws InterruptedException {
+	    // 模拟业务耗时处理流程
+		Thread.sleep(20 * 1000L);
+		return "hello";
+	}
+}
+
+当我们流量请求到此接口执行业务逻辑的时候，若服务端此时执行关机 （kill），spring boot 默认情况会直接关闭容器（tomcat 等），导致此业务逻辑执行失败。
+在一些业务场景下：会出现数据不一致的情况，事务逻辑不会回滚。
+
+在最新的 spring boot 2.3 版本，内置此功能，不需要再自行扩展容器线程池来处理，
+目前 spring boot 嵌入式支持的 web 服务器（Jetty、Reactor Netty、Tomcat 和 Undertow）以及反应式和基于 Servlet 的 web 应用程序都支持优雅停机功能。 我们来看下如何使用:
+当使用server.shutdown=graceful启用时，在 web 容器关闭时，web 服务器将不再接收新请求，并将等待活动请求完成的缓冲期。
+
+
+spring:
+ lifecycle:
+    timeout-per-shutdown-phase: 30s
+	
+server: 
+  shutdown: graceful
+
+
+缓冲期 timeout-per-shutdown-phase 配置
+默认时间为 30S, 意味着最大等待 30S，超时候无论线程任务是否执行完毕都会停机处理，一定要合理合理设置。
+
+
+kill -2 相当于快捷键 Ctrl + C 会触发 Java 的 ShutdownHook 事件处理
+kill -9，暴力美学强制杀死进程，不会执行 ShutdownHook
+
+所以优雅停机应该使用kill -2
+
+
+
+容器停机行为取决于具体的 web 容器行为
+
+web容器名称         行为说明
+
+tomcat 9.0.33+    停止接收请求，客户端新请求等待超时。
+
+
+Reactor Netty     停止接收请求，客户端新请求等待超时。
+
+
+Undertow          停止接收请求，客户端新请求直接返回 503。
+
+
+源码
+public enum Shutdown {
+	/**
+	 * 优雅停机 （限期停机）
+	 *
+	 */
+	GRACEFUL,
+
+	/**
+	 * 立即停机
+	 */
+	IMMEDIATE;
+
+}
