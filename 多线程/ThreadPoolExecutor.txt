@@ -101,6 +101,21 @@ RejectedExecutionHandler   |
 
 	4, 当线程总数等于 maximumPoolSize 并且 workQueue 满了的时候执行 handler 的 rejectedExecution 也就是拒绝策略
 	
+***** 实战 
+    BlockingQueue workQueue=new ArrayBlockingQueue(1);
+    ThreadPoolExecutor threadPoolExecutor=new ThreadPoolExecutor(2,4,100, TimeUnit.SECONDS,workQueue);
 
 
+
+    @RequestMapping(value = {"/thread"})
+    @ResponseBody
+    public String thread()
+    {
+        threadPoolExecutor.execute(new Task());
+        threadPoolExecutor.execute(new Task());
+        threadPoolExecutor.execute(new Task());
+        threadPoolExecutor.execute(new Task());
+        threadPoolExecutor.execute(new Task());
+        return "asdas";
+    }
 
