@@ -1,0 +1,28 @@
+ 
+ CountDownLatch countDownLatch=new CountDownLatch(3);
+
+@RequestMapping(value = {"/countDownLatch"})
+    @ResponseBody
+    public String countDownLatch() throws InterruptedException {
+
+        new Thread(()->
+        {
+            System.out.println(111);
+            countDownLatch.countDown();
+        }
+        ).start();
+        return "countDownLatch";
+    }
+
+    @RequestMapping(value = {"/getCount"})
+    @ResponseBody
+    public String getCountDownLatch() throws InterruptedException {
+        return String.valueOf(countDownLatch.getCount());
+    }
+
+    @RequestMapping(value = {"/result"})
+    @ResponseBody
+    public String result() throws InterruptedException {
+        countDownLatch.await();
+        return "result";
+    }
