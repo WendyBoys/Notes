@@ -21,8 +21,8 @@
     }
 
     @RequestMapping(value = {"/result"})
-    @ResponseBody
+    @ResponseBody   
     public String result() throws InterruptedException {
-        countDownLatch.await();
+        countDownLatch.await();   //线程阻塞 直到 countdown为0 才执行
         return "result";
     }
