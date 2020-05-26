@@ -1,7 +1,7 @@
 spring:
   redis:
     host: 203.195.171.218
-    password: XUAN.199951
+    password:  
     timeout: 25s
     port: 6379
 
