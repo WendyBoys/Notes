@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xuan.veditor.Mapper.ArticleService">
+
+    <resultMap id="ArticleMap" type="Article">
+        <id property="id" column="id"></id>
+        <result property="title" column="title"></result>
+        <result property="area" column="area"></result>
+        <result property="date" column="date"></result>
+        <association property="user" javaType="user">
+            <result property="username" column="username"></result>
+            <result property="iconUrl" column="iconUrl"></result>
+        </association>
+    </resultMap>
+
+    <resultMap id="indexArticleMap" type="Article">
+        <id property="id" column="id"></id>
+        <result property="tag" column="tag"></result>
+        <result property="title" column="title"></result>
+        <result property="date" column="date"></result>
+        <result property="talk" column="talk"></result>
+        <result property="fmUrl" column="fmUrl"></result>
+        <association property="user" javaType="user">
+            <result property="username" column="username"></result>
+            <result property="iconUrl" column="iconUrl"></result>
+        </association>
+    </resultMap>
+
+
+    <select id="getAllArticle"   resultMap="indexArticleMap">
+        select a.id,a.tag,a.title,a.talk,a.date,a.fmUrl,u.username,u.iconUrl from articles a left join user u on a.userid=u.id order by date desc limit #{page},#{pageSize}
+    </select>
+
+
+
+    <insert id="sendArticle">
+        insert into articles values (null,#{title},#{tag},#{area},#{date},#{zan},#{talk},#{userid},#{fmUrl})
+    </insert>
+
+
+    <select id="getArticleById"   resultMap="ArticleMap">
+   SELECT a.title,a.area,a.date,u.username,u.iconUrl FROM articles a left join user u  on a.userid=u.id where a.id=#{id};
+    </select>
+
+    <update id="addTalk">
+        update articles set talk=talk+1 where id=#{id};
+    </update>
+
+    <select id="getQuestion" resultType="article">
+      select id,title from articles  where talk=0 order by rand() limit 8;
+    </select>
+
+    <select id="getUserArticleById" resultType="article">
+     select id,title,date,talk from articles where userid=#{userid};
+    </select>
+
+</mapper>
