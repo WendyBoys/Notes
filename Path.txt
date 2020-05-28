@@ -1,4 +1,5 @@
-Windows有D盘 Linux 没有 ；所以路径不能瞎写 
+Windows有D盘 Linux 没有 
+所以路径不能瞎写 
 
  当前项目目录
 String path= Paths.get(System.getProperty("user.dir")).toString();   
