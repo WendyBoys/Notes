@@ -7,8 +7,8 @@ String path= Paths.get(System.getProperty("user.dir")).toString();
 String path= Paths.get(System.getProperty("user.dir")).getParent().toString();   
 多次跳跃使用多个.getParent()即可
 向内访问可以自定义
-例如
 
+例如
  String path= Paths.get(System.getProperty("user.dir"),"data","img").toString();
 C:\Users\Xiaoxiaoxuan\ideaProject\song变为
 C:\Users\Xiaoxiaoxuan\ideaProject\song\data\img
