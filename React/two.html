@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="https://cdn.staticfile.org/react/16.4.0/umd/react.development.js"></script>
+		<script src="https://cdn.staticfile.org/react-dom/16.4.0/umd/react-dom.development.js"></script>
+		<script src="https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js"></script>
+	</head>
+	<body>
+		<div id="like">
+			
+		</div>
+	</body>
+</html>
+	<script type="text/babel">
+		
+		
+		class Like extends React.Component{
+			constructor(arg) {
+			    super(arg);
+				this.state={
+					isLike:false,
+				}
+				this.onclick=this.onclick.bind(this);//自定义的方法 不是重写的 所以this 是undefinded 需要指定为组件this
+			}
+			
+			onclick()
+			{
+				const isLike=!this.state.isLike;
+				this.setState({isLike:isLike});
+				//this.setState({isLike});
+			}
+			
+			render()
+			{
+				//const {isLike}=this.state;
+				const isLike=this.state.isLike;
+				//return <h1 onClick={this.onclick.bind(this)}>{isLike?'我喜欢你':'你喜欢我'}</h1>;  每次点击都bind this 效率低 因此需要直接在构造器里指定
+				return <h1 onClick={this.onclick}>{isLike?'我喜欢你':'你喜欢我'}</h1>;
+				
+			}
+		}
+		
+		ReactDOM.render(<Like/>,document.getElementById('like'));
+		
+		
+	</script>
