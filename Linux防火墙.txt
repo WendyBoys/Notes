@@ -1,0 +1,26 @@
+查看防火墙状态
+
+firewall-cmd    --state
+
+启动防火墙
+
+systemctl  start   firewalld.service
+
+关闭防火墙
+systemctl  stop   firewalld.service
+
+重启防火墙
+
+firewall-cmd --reload
+
+禁止开机启动启动防火墙
+
+systemctl   disable   firewalld.service
+
+开放3306端口
+
+firewall-cmd --zone=public --add-port=3306/tcp --permanent
+
+查看防火墙开放端口集合
+
+firewall-cmd --zone=public --list-ports
