@@ -1,0 +1,84 @@
+﻿　在kafka解压目录下下有一个config的文件夹，里面放置的是我们的配置文件
+
+　　consumer.properites 消费者配置，这个配置文件用于配置于2.5节中开启的消费者，此处我们使用默认的即可
+
+　　producer.properties 生产者配置，这个配置文件用于配置于2.5节中开启的生产者，此处我们使用默认的即可
+
+　　server.properties kafka服务器的配置，此配置文件用来配置kafka服务器，目前仅介绍几个最基础的配置
+
+	broker.id 申明当前kafka服务器在集群中的唯一ID，需配置为integer,并且集群中的每一个kafka服务器的id都应是唯一的，我们这里采用默认配置即可
+	listeners 申明此kafka服务器需要监听的端口号，如果是在本机上跑虚拟机运行可以不用配置本项，默认会使用localhost的地址，如果是在远程服务器上运行则必须配置，例如：
+　　　　　　　　　　listeners=PLAINTEXT:// 0.0.0.0:9092     （0.0.0.0 是配置允许外界访问）     并确保服务器的9092端口能够访问(关闭服务器防火墙 。。。 安全组开放端口)
+
+　　　　　　3.zookeeper.connect 申明kafka所连接的zookeeper的地址 ，需配置为zookeeper的地址，由于本次使用的是kafka高版本中自带zookeeper，使用默认配置即可
+
+　　　　　　　　　　zookeeper.connect=39.98.230.52:2181    （服务器外网ip   ）同样 关闭防火墙 开放安全组端口
+
+2.4.       运行
+启动zookeeper
+cd进入kafka解压目录，输入
+
+bin/zookeeper-server-start.sh config/zookeeper.properties
+
+启动zookeeper成功后会看到如下的输出
+
+
+
+　　　　2.启动kafka
+
+cd进入kafka解压目录，输入
+
+bin/kafka-server-start.sh config/server.properties
+
+启动kafka成功后会看到如下的输出
+
+ 
+
+2.5.       第一个消息
+　　　2.5.1   创建一个topic
+
+　　　　Kafka通过topic对同一类的数据进行管理，同一类的数据使用同一个topic可以在处理数据时更加的便捷
+
+　　　　在kafka解压目录打开终端，输入
+
+　　　　bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+
+　　　　创建一个名为test的topic
+
+ 
+
+        　在创建topic后可以通过输入
+
+            bin/kafka-topics.sh --list --zookeeper localhost:2181
+
+   来查看已经创建的topic
+
+　　2.4.2   创建一个消息消费者
+
+　　　在kafka解压目录打开终端，输入
+
+　　　　bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic test --from-beginning
+
+　　　可以创建一个用于消费topic为test的消费者
+
+ 
+
+ 
+
+         消费者创建完成之后，因为还没有发送任何数据，因此这里在执行后没有打印出任何数据
+
+         不过别着急，不要关闭这个终端，打开一个新的终端，接下来我们创建第一个消息生产者
+
+　　2.4.3         创建一个消息生产者
+
+　　　　在kafka解压目录打开一个新的终端，输入
+
+　　　　bin/kafka-console-producer.sh --broker-list localhost:9092 --topic test
+
+　　　　在执行完毕后会进入的编辑器页面
+
+
+
+ 
+
+在发送完消息之后，可以回到消息消费者终端中，可以看到，终端中已经打印出了刚才发送的消息
