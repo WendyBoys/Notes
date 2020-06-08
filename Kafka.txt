@@ -41,18 +41,28 @@ bin/kafka-server-start.sh config/server.properties
 
 　　　　在kafka解压目录打开终端，输入
 
-　　　　bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic test
+　　　　bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 5 --topic test
 
-　　　　创建一个名为test的topic
-
+　　　　创建一个名为test的topic     
+		replication-factor 副本数
+		partitions 分区数
  
 
         　在创建topic后可以通过输入
 
             bin/kafka-topics.sh --list --zookeeper localhost:2181
 
-   来查看已经创建的topic
+  		 来查看已经创建的topic
 
+
+			查看topic详细信息
+			bin/kafka-topics.sh --describe --zookeeper localhost:2181  --topic test2
+			
+			修改topic分区数 改为10
+			bin/kafka-topics.sh --alter --zookeeper localhost:2181 --topic test2 --partitions 10
+
+	删除topic test2
+	bin/kafka-topics.sh  --zookeeper localhost:2181 --delete --topic test2
 　　2.4.2   创建一个消息消费者
 
 　　　在kafka解压目录打开终端，输入
@@ -62,6 +72,7 @@ bin/kafka-server-start.sh config/server.properties
 　　　可以创建一个用于消费topic为test的消费者
 
  
+
 
  
 
