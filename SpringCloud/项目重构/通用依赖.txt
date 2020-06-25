@@ -1,0 +1,14 @@
+例如实体类，工具类这样的文件 应该打到一个通用的包
+
+新建moudle 将通用类放入 执行 mvn clean install 打包 然后 根据包名在pom.xml引入即可
+
+打过的包 会出现在本地Maven仓库
+C:\Users\Xiaoxiaoxuan\.m2\repository\com\xuan\cloud-api-commons\1.0-SNAPSHOT
+
+ <dependency>
+            <groupId>com.xuan</groupId>
+            <artifactId>cloud-api-commons</artifactId>
+            <version>${project.version}</version>
+  </dependency>
+
+妈妈再也不用担心项目中重复冗余的类了
