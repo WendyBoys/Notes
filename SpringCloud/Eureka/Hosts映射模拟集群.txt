@@ -4,3 +4,5 @@ Eureka yml文件需要多个不同域名才可模拟集群 都使用localhost 不识别集群
 目录  C:\Windows\System32\drivers\etc
 
 yml需要互相绑定 例如1-->2,3  2-->1,3  3-->1,2
+
+要先启动Eureka集群 再启动服务提供者Provider 再启动客户端消费者Consumer
