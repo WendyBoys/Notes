@@ -1,0 +1,65 @@
+Ribbon本地负载均衡客户端 VS Nginx服务端负载均衡区别
+
+Nginx是服务器负载均衡，客户端所有请求都会交给nginx,然后由nginx实现转发请求。即负载均衡是由服务端实现的。
+
+Ribbon本地负载均衡，在调用微服务接口时候，会在注册中心上获取注册信息服务列表之后缓存到JVM本地，从而在本地实现RPC远程服务调用技术。
+
+
+
+
+举个例子 医院大门是Nginx 病人轮询科室进去之后 再通过Ribbon找科室里不同的医生
+
+
+Ribbon中的7中负载均衡算法：
+
+（1）RoundRobinRule：轮询；
+
+（2）RandomRule：随机；
+
+（3）AvailabilityFilteringRule：会先过滤掉由于多次访问故障而处于断路器状态的服务，还有并发的连接数量超过阈值的服务，然后对剩余的服务列表按照轮询策略进行访问；
+
+（4）WeightedResponseTimeRule：根据平均响应时间计算所有服务的权重，响应时间越快的服务权重越大被选中的概率越大。
+     刚启动时如果统计信息不足，则使用RoundRobinRule（轮询）策略，等统计信息足够，会切换到WeightedResponseTimeRule；
+
+（5）RetryRule：先按照RoundRobinRule（轮询）策略获取服务，如果获取服务失败则在指定时间内进行重试，获取可用的服务；
+
+（6）BestAvailableRule：会先过滤掉由于多次访问故障而处于断路器跳闸状态的服务，然后选择一个并发量最小的服务；
+
+（7）ZoneAvoidanceRule：复合判断Server所在区域的性能和Server的可用性选择服务器；
+
+
+******
+RestTemplate 上加负载均衡注解@LoadBalanced （如果用默认的轮询 这就够了 如果指定规则 启动类上还要加）
+			服务名                                            规则类
+@RibbonClient(name = "CLOUD-PAYMENT-SERVICE",configuration = MyRules.class)
+
+@SpringBootApplication
+@EnableEurekaClient
+@RibbonClient(name = "CLOUD-PAYMENT-SERVICE",configuration = MyRules.class)
+public class ConsumerMainApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(ConsumerMainApplication.class,args);
+    }
+}
+
+
+
+@Configuration
+public class MyRules {
+
+    //替换默认的轮询 使用随机  切记 该类不能和启动类同包 同子包（即不能被ComponentScan扫描） 要新建包 不然会给全局的Ribbon都覆盖了
+   // 启动类com.xuan.cloud.ConsumerMainApplication   规则类 com.xuan.Ribbon.MyRules
+    @Bean
+    public IRule iRule()
+    {
+        return new RandomRule();
+    }
+}
+
+
+    @Bean
+    @LoadBalanced //内部使用了Ribbon实现了客户端的负载均衡
+    public RestTemplate getRestTemplate()
+    {
+        return new RestTemplate();
+    }
