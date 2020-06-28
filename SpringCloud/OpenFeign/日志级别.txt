@@ -1,0 +1,37 @@
+NONE:默认的，不显示任何日志;
+BASIC:仅记录请求方法、URL、 响应状态码及执行时间;
+HEADERS:除了BASIC中定义的信息之外,还有请求和响应的头信息;
+FULL:除了HEADERS中定义的信息之外，还有请求和响应的正文及元数据。
+
+*****设置方式
+
+@Configuration
+public class OpenFeignConfig {
+
+    //将feign的日志级别调为Full
+    @Bean
+    Logger.Level feignLoggerLevel()
+    {
+        return Logger.Level.FULL;
+    }
+}
+
+yml中
+logging:
+  level:
+    #指定要监听日志的接口
+    com.xuan.cloud.service.PaymentService: debug
+
+
+2020-06-28 21:43:23.717 DEBUG 14088 --- [p-nio-80-exec-9] com.xuan.cloud.service.PaymentService    : [PaymentService#getPaymentById] ---> GET http://CLOUD-PAYMENT-SERVICE/payment/get/1 HTTP/1.1
+2020-06-28 21:43:23.717 DEBUG 14088 --- [p-nio-80-exec-9] com.xuan.cloud.service.PaymentService    : [PaymentService#getPaymentById] ---> END HTTP (0-byte body)
+2020-06-28 21:43:23.726 DEBUG 14088 --- [p-nio-80-exec-9] com.xuan.cloud.service.PaymentService    : [PaymentService#getPaymentById] <--- HTTP/1.1 200 (9ms)
+2020-06-28 21:43:23.726 DEBUG 14088 --- [p-nio-80-exec-9] com.xuan.cloud.service.PaymentService    : [PaymentService#getPaymentById] connection: keep-alive
+2020-06-28 21:43:23.726 DEBUG 14088 --- [p-nio-80-exec-9] com.xuan.cloud.service.PaymentService    : [PaymentService#getPaymentById] content-type: application/json
+2020-06-28 21:43:23.726 DEBUG 14088 --- [p-nio-80-exec-9] com.xuan.cloud.service.PaymentService    : [PaymentService#getPaymentById] date: Sun, 28 Jun 2020 13:43:23 GMT
+2020-06-28 21:43:23.726 DEBUG 14088 --- [p-nio-80-exec-9] com.xuan.cloud.service.PaymentService    : [PaymentService#getPaymentById] keep-alive: timeout=60
+2020-06-28 21:43:23.726 DEBUG 14088 --- [p-nio-80-exec-9] com.xuan.cloud.service.PaymentService    : [PaymentService#getPaymentById] transfer-encoding: chunked
+2020-06-28 21:43:23.726 DEBUG 14088 --- [p-nio-80-exec-9] com.xuan.cloud.service.PaymentService    : [PaymentService#getPaymentById] 
+2020-06-28 21:43:23.727 DEBUG 14088 --- [p-nio-80-exec-9] com.xuan.cloud.service.PaymentService    : [PaymentService#getPaymentById] {"code":200,"message":"查询成功,端口为8002","data":{"id":1,"serial":"1"}}
+2020-06-28 21:43:23.727 DEBUG 14088 --- [p-nio-80-exec-9] com.xuan.cloud.service.PaymentService    : [PaymentService#getPaymentById] <--- END HTTP (80-byte body)
+

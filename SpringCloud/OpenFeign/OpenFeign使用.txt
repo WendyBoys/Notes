@@ -1,0 +1,103 @@
+为什么不用Ribbon+RestTemplate了呢
+
+因为那样 是在Controller中进行RestTemplate 请求 虽然效果一样 但是没有那么的接口规范了
+
+OpenFeign 可以在Controller中 直接调用接口 巨tm规范 就用这个了
+
+
+使用：
+启动类加注解 @EnableFeignClients
+
+
+@Component
+@FeignClient("CLOUD-PAYMENT-SERVICE") //指定服务名
+public interface PaymentService {
+
+    @GetMapping(value = "/payment/get/{id}") //要和提供者一模一样路径
+    CommonResult<Payment> getPaymentById(@PathVariable("id") int id); //提供者返回的是Payment 这里可以加工返回CommonResult
+
+    @GetMapping(value = "/payment/getTimeoutPort") //调用接口时间超过1000ms 应该在ym配置延时超过1000ms 不然会报错
+    String getTimeoutPort();
+}
+
+
+
+
+
+
+@RestController
+public class OrderController {
+
+    @Resource
+    private PaymentService paymentService;
+
+    @GetMapping(value = "/consumer/payment/get/{id}")
+    public CommonResult<Payment> get(@PathVariable("id") int id)
+    {
+        return paymentService.getPaymentById(id);
+    }
+
+
+    @GetMapping(value = "/consumer/payment/getTimeoutPort")
+    public String getTimeoutPort()
+    {
+
+        return paymentService.getTimeoutPort();
+    }
+}
+
+
+
+
+
+
+CLOUD-PAYMENT-SERVICE提供者：
+
+	public interface PaymentService {
+    int create(Payment payment);
+    Payment getPaymentById(@Param("id") int id);
+}
+
+
+
+
+   @GetMapping(value = "/payment/get/{id}")
+    public CommonResult get(@PathVariable("id")Integer id){
+        Payment payMentById = paymentService.getPaymentById(id);
+        log.info("******查询结果"+payMentById);
+        if(payMentById!=null)
+        {
+            return new CommonResult(200,"查询成功,端口为"+port,payMentById);
+        }
+        else
+        {
+            return new CommonResult(444,"没有对应记录，查询失败,端口为"+port,null);
+        }
+    }
+
+
+	
+
+   @GetMapping(value = "/payment/getTimeoutPort")
+    public String getTimeoutPort()
+    {
+        try {
+            TimeUnit.SECONDS.sleep(3);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return port;
+    }
+
+
+
+
+
+
+当接口请求延时超过1000ms 需要在yml配置 不然报错
+
+ribbon:
+  #建立连接时间 默认是1000ms 不修改 当延时超过1000ms就报超时 此处改为5000ms
+  ReadTimeout: 5000
+  #指的是建立连接后从服务器读取到可用资源所用的时间
+  ConnectTimeout: 5000
