@@ -20,6 +20,8 @@ Hystrix一般使用在客户端 但是服务端也可以 controller  service 实
     }
 	
 在客户端配置 启动类加@EnableHystrix
+
+*** yml加了以下配置 会导致在客户端请求如果时间超过1s没返回直接进入兜底方法 即使 客户端允许超时时间没有被达到 很坑 就别加了
 yml加
 #客户端开启hystrix 要配置这个 服务端没feign 开个鸡毛
 feign:
