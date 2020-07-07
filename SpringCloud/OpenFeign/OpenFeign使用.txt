@@ -103,7 +103,10 @@ ribbon:
   ConnectTimeout: 5000
 
 
-****OpenFeign调用失败回调
+****OpenFeign调用失败回调 需要在yml加配置(yml加了以下配置 会导致在客户端请求如果时间超过1s没返回直接进入Hystrix兜底方法 即使 客户端允许超时时间没有被达到 很坑 所以如果使用了这个 就别再用Hystrix的那个了)
+feign:
+  hystrix:
+    enabled: true
 
 @Component
 @FeignClient(value = "cloud-payment-hystrix-service",fallback = PaymentFallBackService.class) //指定服务名
