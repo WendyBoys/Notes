@@ -101,3 +101,34 @@ ribbon:
   ReadTimeout: 5000
   #指的是建立连接后从服务器读取到可用资源所用的时间
   ConnectTimeout: 5000
+
+
+****OpenFeign调用失败回调
+
+@Component
+@FeignClient(value = "cloud-payment-hystrix-service",fallback = PaymentFallBackService.class) //指定服务名
+public interface PaymentService {
+
+    @GetMapping(value = "/pay/hystrix/ok")
+    String ok(@RequestParam("id") int id);
+
+
+    @GetMapping(value = "/pay/hystrix/timeout")
+    String timeout(@RequestParam("id")int id);
+}
+
+
+当服务调用成功没什么事 当调用失败 比如服务器宕机 就会走这里
+
+@Component
+public class PaymentFallBackService implements PaymentService {
+    @Override
+    public String ok(int id) {
+        return "fallback--------ok";
+    }
+
+    @Override
+    public String timeout(int id) {
+        return "fallback--------timeout";
+    }
+}
