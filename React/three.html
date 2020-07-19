@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.staticfile.org/react/16.4.0/umd/react.development.js"></script>
+	<script src="https://cdn.staticfile.org/react-dom/16.4.0/umd/react-dom.development.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/prop-types/15.6.0/prop-types.js"></script>
+	<script src="https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js"></script>
+</head>
+<body>
+    <div id="app">
+
+    </div>
+</body>
+</html>
+<script type="text/babel">
+
+    class App extends React.Component
+    {
+    
+        constructor(props)
+        {
+            super(props);
+            this.state={
+                list:['唱','跳','Rap']
+            }
+            this.toList=this.toList.bind(this)
+        }
+
+        toList(value)
+        {
+            const {list}=this.state
+            list.unshift(value);
+            this.setState({list});
+        }
+
+        
+        render()
+        {
+            const {list}=this.state;
+            return(
+                <div>
+                    <h3>React</h3>
+                    <Add count={list.length} toList={this.toList}/>
+                    <List list={list}/>
+                </div>
+            )   
+        }
+    
+    }
+
+
+    class Add extends React.Component
+    {
+    
+        constructor(props)
+        {
+            super(props);
+            this.click=this.click.bind(this);
+        
+        }
+        
+
+        click()
+        {
+          const value=this.input.value.trim()
+          this.props.toList(value);
+        }
+
+
+
+        render()
+        {
+            return(
+                <div>
+               <input type="text" ref={input => this.input=input} />
+               <button onClick={this.click}>{this.props.count}</button>
+               </div>
+            )   
+        }
+    
+    }
+
+
+
+    class List extends React.Component
+    {
+    
+        constructor(props)
+        {
+            super(props);
+        }
+        
+        render()
+        {
+            return(
+                <div>
+                    <ul>
+                    {this.props.list.map((item,index)=><li key={index}>{item}</li>)}
+                    </ul>
+                </div>
+            )   
+        }
+    
+    }
+
+
+
+
+    ReactDOM.render(<App/>,document.getElementById('app'));
+
+
+
+</script>

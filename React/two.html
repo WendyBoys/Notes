@@ -5,10 +5,23 @@
 		<title></title>
 		<script src="https://cdn.staticfile.org/react/16.4.0/umd/react.development.js"></script>
 		<script src="https://cdn.staticfile.org/react-dom/16.4.0/umd/react-dom.development.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/prop-types/15.6.0/prop-types.js"></script>
 		<script src="https://cdn.staticfile.org/babel-standalone/6.26.0/babel.min.js"></script>
 	</head>
 	<body>
 		<div id="like">
+			
+		</div>
+		
+		<div id="person">
+			
+		</div>
+		
+		<div id="user">
+			
+		</div>
+		
+		<div id="input">
 			
 		</div>
 	</body>
@@ -17,15 +30,15 @@
 		
 		
 		class Like extends React.Component{
-			constructor(arg) {
-			    super(arg);
+			constructor(props) {
+			    super(props);
 				this.state={
 					isLike:false,
 				}
-				this.onclick=this.onclick.bind(this);//自定义的方法 不是重写的 所以this 是undefinded 需要指定为组件this
+				this.oncalick=this.oncalick.bind(this);//自定义的方法 不是重写的 所以this 是undefinded 需要指定为组件this
 			}
 			
-			onclick()
+			oncalick()
 			{
 				const isLike=!this.state.isLike;
 				this.setState({isLike:isLike});
@@ -37,12 +50,108 @@
 				//const {isLike}=this.state;
 				const isLike=this.state.isLike;
 				//return <h1 onClick={this.onclick.bind(this)}>{isLike?'我喜欢你':'你喜欢我'}</h1>;  每次点击都bind this 效率低 因此需要直接在构造器里指定
-				return <h1 onClick={this.onclick}>{isLike?'我喜欢你':'你喜欢我'}</h1>;
+				return <h1 onClick={this.oncalick}>{isLike?'我喜欢你':'你喜欢我'}</h1>;
 				
 			}
 		}
 		
 		ReactDOM.render(<Like/>,document.getElementById('like'));
+		
+		
+		function Person(props)
+		{
+			return (<ul>
+				<li>{props.name}</li>
+				<li>{props.age}</li>
+				<li>{props.sex}</li>
+			</ul>);
+		}
+		const p1={
+			name:'赵云',
+			age:21,
+			sex:'男',
+		};
+		
+		Person.defaultProps={
+			age:18,
+			
+		};
+		
+	
+		Person.propTypes ={
+			name:PropTypes.string.isRequired,
+			age:PropTypes.number.isRequired,
+		};
+		//ReactDOM.render(<Person name={p1.name} age="12" />,document.getElementById('person')); 
+		ReactDOM.render(<Person {...p1} />,document.getElementById('person'));
+		
+		
+		class User extends React.Component{
+			render()
+			{
+				return  (<ul>
+				<li>{this.props.name}</li>
+				<li>{this.props.age}</li>
+				<li>{this.props.sex}</li>
+			</ul>)
+			}
+			
+		}
+		
+		User.defaultProps={
+			age:28,
+			
+		};
+		
+			
+		User.propTypes ={
+			name:PropTypes.string.isRequired,
+			age:PropTypes.number.isRequired,
+		};
+		
+		const p2={
+			name:'云',
+			
+			sex:'男',
+		};
+		
+			ReactDOM.render(<User {...p2} />,document.getElementById('user'));
+		
+		
+		
+		class MyInput extends React.Component{
+			
+			constructor(props)
+			{
+				super(props);
+				this.get=this.get.bind(this);
+			}
+			
+			get()
+			{
+				alert(this.input.value);
+			}
+			
+			lost(event)
+			{
+				alert(event.target.value);
+			}
+			
+			render()
+			{
+				return(
+				<div>
+					<input type="text" ref={input => this.input=input} />
+					<input type="text" onBlur={this.lost} /> 
+					<button onClick={this.get} >获取</button>
+				</div>
+				)
+			}
+			
+		}
+		//onblur没写bind也行
+		ReactDOM.render(<MyInput/>,document.getElementById('input'));
+		
 		
 		
 	</script>
